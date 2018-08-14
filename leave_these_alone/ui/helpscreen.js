@@ -5,11 +5,14 @@ class HelpScreen extends ScreenBase
         super();
 
         // Make a title
-        ui.makeText(this, "HOW TO PLAY", app.SCREEN_WIDTH / 2, 100, ui.titleFont.font, ui.titleFont.color);
+        ui.makeText(this, uiSettings.HELP_TITLE, app.SCREEN_WIDTH / 2, 100, ui.titleFont.font, ui.titleFont.color);
 
         // Instructions
-        ui.makeText(this, "CLICK TO EARN POINTS", app.SCREEN_WIDTH / 2, 250, ui.defaultFont.font, ui.defaultFont.color);
-        ui.makeText(this, "CLICK FAST BEFORE TIME IS UP", app.SCREEN_WIDTH / 2, 300, ui.defaultFont.font, ui.defaultFont.color);
+        for(var i = 0; i < uiSettings.HELP_LINES.length; i++)
+        {
+            ui.makeText(this, uiSettings.HELP_LINES[i], app.SCREEN_WIDTH / 2, 265 + 45 * i - (45 * (uiSettings.HELP_LINES.length - 1) / 2), ui.defaultFont.font, ui.defaultFont.color);
+        }
+        
 
         // Make a back button
         var textInfo = { text: "BACK" };

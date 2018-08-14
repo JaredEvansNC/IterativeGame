@@ -17,13 +17,12 @@ var app = {
     // Keep track of the game time
     elapsedTime: 0, // total app time
     gameTime: 0, // time for this session, reset when entering game
-    maxGameTime: 5, // when does the game end
 
     // Game Settings
     FPS: 30,
 
     // Asset management
-    gameObjects: [],
+    bullets: [],
     player: null,
 
     // Game state
@@ -39,9 +38,8 @@ var app = {
     // Note that since our particles are createjs objects, createjs will do the drawing for us
     particleEmitters: [],
 
-    // Track score
-    score: 0,
-    pointsPerClick: 10,
+    // Can the player fire again?
+    fireRateTimer : 0,
 
     // Keyboard input info
     KEYCODE_LEFT : { code: 37, isPressed: false},
@@ -49,13 +47,14 @@ var app = {
     KEYCODE_RIGHT : { code: 39, isPressed: false},
     KEYCODE_DOWN : { code: 40, isPressed: false},
     KEYCODE_SPACEBAR : { code: 32, isPressed: false},
+    KEYCODE_W : { code: 87, isPressed: false},
+    KEYCODE_A : { code: 65, isPressed: false},
+    KEYCODE_S : { code: 83, isPressed: false},
+    KEYCODE_D : { code: 68, isPressed: false},
+
 
     // Mouse pos tracker
     mousePos: {x: 0, y: 0},
-
-    // Player Movement Settings
-    moveSpeed: 100,
-    rotSpeed: 100,
 
     // Setup the canvas
     setupCanvas: function() {
@@ -114,13 +113,6 @@ var app = {
 		{
 			app.screen.update(dt); // update the current screen
 		}
-
-        // Update all of our game objects
-        for (var i = 0; i < app.gameObjects.length; i++)
-        {
-            app.gameObjects[i].update(dt);
-        }
-
         // Particle test code
         for (var i = 0; i < app.particleEmitters.length; i++)
         {
@@ -142,46 +134,49 @@ var app = {
         }
         else if (app.state == "gameplay")
         {
-            var hasMoved = false;
+             // Update all of our bullets
+            for (var i = 0; i < app.bullets.length; i++)
+            {
+                app.bullets[i].update(dt);
+            }
 
-            // Update the game timer and end the game if needed
+            // Update the player
+            app.player.update(dt);
+
+            // Update the game timer
             app.gameTime += dt;
 
-            app.screen.timerUI.text = "TIME LEFT: " + (((app.maxGameTime - app.gameTime) | 0) + 1);
-
-            if(app.gameTime >= app.maxGameTime)
+            // Update our fire rate
+            if(app.fireRateTimer >= 0)
             {
-                app.gotoScreen("gameover");
+                app.fireRateTimer -= dt;
             }
 
             // Poll the keys and move the player character accordinlgy
-            if(app.KEYCODE_LEFT.isPressed)
+            if(app.KEYCODE_LEFT.isPressed || app.KEYCODE_A.isPressed)
             {
-                app.player.addRotation(-app.rotSpeed * dt); 
+                app.player.addPosition(-playerSettings.moveSpeed * dt, 0);
             }
 
-            if(app.KEYCODE_RIGHT.isPressed)
+            if(app.KEYCODE_RIGHT.isPressed || app.KEYCODE_D.isPressed)
             {
-                app.player.addRotation(app.rotSpeed * dt);
+                app.player.addPosition(playerSettings.moveSpeed * dt, 0);
             }
 
-            if(app.KEYCODE_UP.isPressed)
+            if(app.KEYCODE_UP.isPressed || app.KEYCODE_W.isPressed)
             {
-                var posX = app.moveSpeed * dt * Math.cos(app.player.getRotationRadians());
-                var posY = app.moveSpeed * dt * Math.sin(app.player.getRotationRadians());
-                app.player.addPosition(posX,posY);
-
-                hasMoved = true;
+                app.player.addPosition(0, -playerSettings.moveSpeed * dt);
             }
 
-            if(app.KEYCODE_DOWN.isPressed)
+            if(app.KEYCODE_DOWN.isPressed || app.KEYCODE_S.isPressed)
             {
-                var posX = app.moveSpeed * dt * Math.cos(app.player.getRotationRadians());
-                var posY = app.moveSpeed * dt * Math.sin(app.player.getRotationRadians());
-                app.player.addPosition(-posX,-posY);
-                hasMoved = true;
+                app.player.addPosition(0, playerSettings.moveSpeed * dt);
             }
 
+            // We need the angle in both radians and degrees
+            var angleRad = Math.atan2(app.mousePos.y - app.player.position.y, app.mousePos.x - app.player.position.x);
+            var angleDeg = angleRad * 180 / Math.PI;
+            app.player.rotation = angleDeg;
         }
 
         // Now that everything is updated, draw our game
@@ -191,11 +186,6 @@ var app = {
     // Our game's draw function, which will be run every tick at the FPS we specified
     draw: function (dt)
     {
-        //Draw all of our game objects
-        for (var i = 0; i < app.gameObjects.length; i++)
-        {
-            app.gameObjects[i].draw(dt);
-        }
 
         // Draw our game to match the state
         if(app.state == "loading")
@@ -277,6 +267,10 @@ var app = {
             case app.KEYCODE_UP.code:       app.KEYCODE_UP.isPressed = true; return false;
             case app.KEYCODE_DOWN.code:     app.KEYCODE_DOWN.isPressed = true; return false;
             case app.KEYCODE_SPACEBAR.code: app.KEYCODE_SPACEBAR.isPressed = true; return false;
+            case app.KEYCODE_W.code:     app.KEYCODE_W.isPressed = true; return false;
+            case app.KEYCODE_A.code:     app.KEYCODE_A.isPressed = true; return false;
+            case app.KEYCODE_S.code:     app.KEYCODE_S.isPressed = true; return false;
+            case app.KEYCODE_D.code:     app.KEYCODE_D.isPressed = true; return false;
         }
     },
         
@@ -292,19 +286,29 @@ var app = {
             case app.KEYCODE_UP.code:       app.KEYCODE_UP.isPressed = false; break;
             case app.KEYCODE_DOWN.code:     app.KEYCODE_DOWN.isPressed = false; break;
             case app.KEYCODE_SPACEBAR.code: app.KEYCODE_SPACEBAR.isPressed = false; break;
+            case app.KEYCODE_W.code:     app.KEYCODE_W.isPressed = false; return false;
+            case app.KEYCODE_A.code:     app.KEYCODE_A.isPressed = false; return false;
+            case app.KEYCODE_S.code:     app.KEYCODE_S.isPressed = false; return false;
+            case app.KEYCODE_D.code:     app.KEYCODE_D.isPressed = false; return false;
         }
     },
 
     // When the mouse is clicked, pass it on to the appropriate places
     handleMouseDown: function(evt)
     {
-        // If we're in the game, track the number of clicks
-        if(app.state == "gameplay")
+        if(this.state == "gameplay")
         {
-            app.addToScore(app.pointsPerClick);
-
-            app.screen.scoreUI.text = "SCORE: " + app.score;
+            // fire a bullet
+            if(this.fireRateTimer <= 0)
+            {
+                var offset = 30;
+                var xPos = app.player.position.x + (Math.cos(app.player.getRotationRadians()) * offset);
+		        var yPos = app.player.position.y + (Math.sin(app.player.getRotationRadians()) * offset);
+                app.bullets.push(new Bullet(this.stage, "bullet" + app.bullets.length, xPos, yPos, app.player.rotation));
+                this.fireRateTimer = playerSettings.fireRate;
+            }
         }
+        
     },
 
     // Change the score by the given amount
@@ -324,7 +328,6 @@ var app = {
     createPlayer: function()
     {
         app.player = new Actor(app.stage, "player", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT /2, 0.5, 0.5);
-        app.gameObjects.push(app.player);
     }
 
 }

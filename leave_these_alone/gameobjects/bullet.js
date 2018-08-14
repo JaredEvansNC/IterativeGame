@@ -1,17 +1,12 @@
-class Actor {
-    constructor(parent, name = "actor", x = 0, y = 0, scaleX = 1, scaleY = 1, rotation = 0)
+class Bullet {
+    constructor(parent, name = "bullet", x = 0, y = 0, rotation = 0, scaleX = 1, scaleY = 1)
     {
         // create and parent the image
         this._container = new createjs.Container();
         this._image = new createjs.Shape();
-        this._image.graphics.beginFill("red").dr(0, 0, 50, 50);
+        this._image.graphics.beginFill("magenta").dr(0, 0, 15, 7.5);
         parent.addChild(this._container);
         this._container.addChild(this._image);
-
-        // make a gun
-        var gun = new createjs.Shape();
-        gun.graphics.beginFill('gray').dr(-7.5, 10, 15, 35);
-        this._container.addChild(gun);
 
         // Set the name
         this._name = name;
@@ -28,11 +23,11 @@ class Actor {
         this._container.rotation = this._rotation;    // degrees
 
         // Set a central reg x point
-        this._image.setBounds(0, 0, 50, 50);
+        this._image.setBounds(0, 0, 15, 7.5);
         this._image.regX = this._image.getBounds().width/2;
         this._image.regY = this._image.getBounds().height/2;
 
-        this._radius = playerSettings.collisionRadius;
+        this._radius = playerSettings.bulletCollisionRadius;
 
         if(gameSettings.DEBUG_MODE_ON)
         {
@@ -86,14 +81,25 @@ class Actor {
     update(dt)
     {
         // Update our position and rotation
+        this._position.x += Math.cos(this.getRotationRadians()) * playerSettings.bulletSpeed * dt;
+		this._position.y += Math.sin(this.getRotationRadians()) *  playerSettings.bulletSpeed  * dt;
         this._container.x = this._position.x;
-        this._container.y = this._position.y;
-        this._container.rotation = this._rotation - 90;
+        this._container.y = this._position.y; 
+
+        if(this._position.x < -10 || this._position.x > app.SCREEN_WIDTH + 10 || this._position.y < -10 || this._position.y > app.SCREEN_HEIGHT + 10)
+        {
+            this.killBullet();
+        }
     }
 
     draw(dt)
     {
         // Any special draw code we need
+    }
+
+    killBullet()
+    {
+        app.bullets.splice(app.bullets.indexOf(this), 1);
     }
 
 }
