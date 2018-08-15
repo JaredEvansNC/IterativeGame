@@ -20,18 +20,20 @@ var app = {
 
     // Game Settings
     FPS: 30,
+    currentWave: 1,
+
+    // menus
+    // wavestart
+    // inwave
+    // postwave
+    // gameover
+    state: "menus",
+    waveStartTimer: gameSettings.waveStartDelay,
+    postWaveTimer: gameSettings.waveIsOverDelay,
 
     // Asset management
     bullets: [],
     player: null,
-
-    // Game state
-    //  - loading
-    //  - gameplay
-    //  - mainmenu
-    //  - gameover
-    //  - help
-    gamestate: "mainmenu",
 
     // Track the particle emitters
     // We'll update this in update
@@ -95,7 +97,8 @@ var app = {
         createjs.Ticker.framerate = this.FPS;
 
         // Create the first screen
-        this.gotoScreen("mainmenu");
+        this.gotoScreen("menus");
+
 
     },
 
@@ -120,19 +123,12 @@ var app = {
         }
 
         // Update our game to match the state
-        if(app.state == "loading")
+        if(app.state == "menus")
         {
-            // Anything specific in the loading state
+            // Anything specific in the menu state
         }
-        else if (app.state == "mainmenu")
-        {
-            // Anything specific in the main menu state
-        }
-        else if (app.state == "help")
-        {
-            // Anything specific in the help state
-        }
-        else if (app.state == "gameplay")
+        // Update specific to actually being in game
+        else if (app.state == "wavestart" || app.state == "inwave" || app.state == "postwave")
         {
              // Update all of our bullets
             for (var i = 0; i < app.bullets.length; i++)
@@ -177,7 +173,24 @@ var app = {
             var angleRad = Math.atan2(app.mousePos.y - app.player.position.y, app.mousePos.x - app.player.position.x);
             var angleDeg = angleRad * 180 / Math.PI;
             app.player.rotation = angleDeg;
+            
+            // Update the prewave sequence if we're here
+            if (app.state == "wavestart")
+            {
+                if(app.waveStartTimer > 0)
+                {
+                    app.waveStartTimer -= dt;
+
+
+                    if(app.waveStartTimer <= 0)
+                    {
+                        app.state = "inwave";
+                    }
+                }
+            }
         }
+            
+        
 
         // Now that everything is updated, draw our game
         app.draw(dt); 
@@ -212,18 +225,11 @@ var app = {
         // In most cases, we clear all the children of the current screen 
         switch(screenType)
         {
-			// This loading screen is a special case, and is included in assets.js
-            case "loading":
-            this.screen.removeAllChildren();
-            this.screen = new LoadingScreen();
-            this.state = "loading";
-            break;
-
-            case "mainmenu":
+            case "menus":
             effects.clearAllParticles();
             this.screen.removeAllChildren();
             this.screen = new MainMenu();
-            this.state = "mainmenu";
+            this.state = "menus";
             break;
 
             case "help":
@@ -233,12 +239,12 @@ var app = {
             this.state = "help";
             break;
 
-            case "gameplay":
+            case "wavestart":
             effects.clearAllParticles();
             this.screen.removeAllChildren();
             this.resetGame(); 
             this.screen = new GameScreen();
-            this.state = "gameplay";
+            this.state = "wavestart";
             this.createPlayer();
             break;
 
