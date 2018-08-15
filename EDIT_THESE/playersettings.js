@@ -1,7 +1,7 @@
 var playerSettings = {
 
     moveSpeed: 100,
-
+    startingHealth: 1,
     collisionRadius: 50,
 
     // Bullet settings

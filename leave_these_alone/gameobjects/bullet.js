@@ -99,7 +99,13 @@ class Bullet {
 
     killBullet()
     {
+        app.stage.removeChild(this._container);
         app.bullets.splice(app.bullets.indexOf(this), 1);
+    }
+
+    onCollision(collidingObject)
+    {
+        this.killBullet();
     }
 
 }

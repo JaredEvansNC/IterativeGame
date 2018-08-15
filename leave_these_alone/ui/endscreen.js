@@ -14,7 +14,7 @@ class EndScreen extends ScreenBase
         var textInfo = { text: "PLAY AGAIN" };
         this.playButton = ui.makeSimpleButton(this, app.SCREEN_WIDTH / 2, 375, 200, 50, textInfo);
         this.playButton.callback = function(evt) {
-            app.gotoScreen("gameplay");
+            app.gotoScreen("wavestart");
         }
      }
 }

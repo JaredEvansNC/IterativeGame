@@ -15,7 +15,42 @@ class Enemy {
         this._name = name;
 
         // Set the position and rotation
-        this._position = {x: 30, y: 30};
+        var x = -50;
+        var y = -50;
+
+        var coinFlip = Math.random() * 2;
+        if(coinFlip > 1)
+        {
+            // top/bottom spawn
+            x = Math.random() * 800;
+
+            var coinFlip2 = Math.random() * 2;
+            if(coinFlip2 > 1)
+            {
+                y = -50;
+            }
+            else
+            {
+                y = 650;
+            }
+        }
+        else
+        {
+            // left/right spawn
+            y = Math.random() * 600;
+
+            var coinFlip3 = Math.random() * 2;
+            if(coinFlip3 > 1)
+            {
+                x = -50;
+            }
+            else
+            {
+                x = 850;
+            }
+        }
+
+        this._position = {x: x, y: y};
         this._rotation = 0;
 
         // Set the attributes of the container
@@ -96,11 +131,57 @@ class Enemy {
         this._container.x = this._position.x;
         this._container.y = this._position.y;
         this._container.rotation = this._rotation - 90;
+
+        // Test for collisions
+        var enemy = this;
+        app.bullets.forEach(function(bullet){
+            if(areActorsColliding(enemy, bullet))
+            {
+                enemy.onCollision(bullet);
+                bullet.onCollision(enemy);
+            }
+        });
+
+        if(areActorsColliding(enemy, app.player))
+        {
+            enemy.onCollision(app.player);
+            app.player.onCollision(enemy);
+        }
     }
 
     draw(dt)
     {
         // Any special draw code we need
+    }
+    
+    killEnemy()
+    {
+        app.stage.removeChild(this._container);
+        app.enemies.splice(app.enemies.indexOf(this), 1);
+    }
+
+    onCollision(collidingObject)
+    {
+        this.killEnemy();
+
+        if(collidingObject instanceof Bullet)
+        {
+            app.enemiesKilledThisWave++;
+
+            if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemiesToClear)
+            {
+                app.state = "postwave";
+                app.postWaveTimer = gameSettings.waveIsOverDelay;
+                app.currentWave++;
+                app.screen.waveText.text += " COMPLETE";
+                app.clearEnemies();
+
+                if (app.currentWave > gameSettings.waveDefs.length)
+                {
+                    app.screen.waveText.text = gameSettings.victoryMessage;
+                }
+            }
+        }
     }
 
 }

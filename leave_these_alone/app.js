@@ -22,6 +22,7 @@ var app = {
     // Game Settings
     FPS: 30,
     currentWave: 1,
+    enemiesKilledThisWave: 0,
 
     // menus
     // wavestart
@@ -237,8 +238,42 @@ var app = {
                     }
                 }
             }
+
+            // If we're here, handle the post wave sequence
+            if (app.state == "postwave")
+            {
+                if(app.postWaveTimer > 0)
+                {
+                    app.postWaveTimer -= dt;
+
+                    if(app.postWaveTimer <= gameSettings.waveIsOverDelay * 0.25)
+                    {
+                        app.screen.waveText.alpha = lerp(0, 1, app.postWaveTimer / (gameSettings.waveIsOverDelay * 0.25));
+                    }
+                    else if (app.postWaveTimer >= gameSettings.waveIsOverDelay * 0.75)
+                    {
+                        var timeOffset = gameSettings.waveIsOverDelay * 0.75;
+                        app.screen.waveText.alpha = lerp(1, 0, (app.postWaveTimer - timeOffset) / (gameSettings.waveIsOverDelay  - timeOffset));
+                    }
+                    else
+                    {
+                        app.screen.waveText.alpha = 1;
+                    }
+
+                    if(app.postWaveTimer <= 0)
+                    {
+                        app.waveReset();
+                        
+                        // If the game is over, end it now
+                        if(app.currentWave > gameSettings.waveDefs.length)
+                        {
+                            app.gotoScreen("gameover");
+                        }
+                    }
+                }
+            }
+
         }
-            
         
 
         // Now that everything is updated, draw our game
@@ -378,6 +413,8 @@ var app = {
     {
         app.score = 0;
         app.gameTime = 0;
+        app.clearEnemies();
+        app.waveReset();  
     },
 
     // Creates the player object
@@ -390,7 +427,25 @@ var app = {
     getNextSpawnTime: function()
     {
         this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer + gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
-        console.log(this.nextSpawnTime);
+    },
+
+    clearEnemies: function()
+    {
+        app.enemies.forEach(function(enemy){
+            enemy.killEnemy();
+        });
+    },
+
+    waveReset: function()
+    {
+        app.state = "wavestart";
+        if(app.screen.updateWaveText)
+        {
+            app.screen.updateWaveText();
+            app.screen.waveText.alpha = 0;
+        }
+        app.waveStartTimer = gameSettings.waveStartDelay;
+        app.enemiesKilledThisWave = 0;
     }
 
 }

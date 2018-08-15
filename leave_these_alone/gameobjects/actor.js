@@ -34,6 +34,8 @@ class Actor {
 
         this._radius = playerSettings.collisionRadius;
 
+        this.health = playerSettings.startingHealth;
+
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
@@ -94,6 +96,17 @@ class Actor {
     draw(dt)
     {
         // Any special draw code we need
+    }
+
+    onCollision(collidingObject)
+    {
+        this.health -= collidingObject.info.damage;
+        console.log("Player health is now " + this.health );
+
+        if (this.health <= 0)
+        {
+            app.gotoScreen("gameover");
+        }
     }
 
 }
