@@ -17,6 +17,7 @@ var app = {
     // Keep track of the game time
     elapsedTime: 0, // total app time
     gameTime: 0, // time for this session, reset when entering game
+    nextSpawnTime: 0,
 
     // Game Settings
     FPS: 30,
@@ -33,6 +34,7 @@ var app = {
 
     // Asset management
     bullets: [],
+    enemies: [],
     player: null,
 
     // Track the particle emitters
@@ -136,6 +138,12 @@ var app = {
                 app.bullets[i].update(dt);
             }
 
+             // Update all of our enemies
+             for (var i = 0; i < app.enemies.length; i++)
+             {
+                 app.enemies[i].update(dt);
+             }
+
             // Update the player
             app.player.update(dt);
 
@@ -181,10 +189,51 @@ var app = {
                 {
                     app.waveStartTimer -= dt;
 
+                    if(app.waveStartTimer <= gameSettings.waveStartDelay * 0.25)
+                    {
+                        app.screen.waveText.alpha = lerp(0, 1, app.waveStartTimer / (gameSettings.waveStartDelay * 0.25));
+                    }
+                    else if (app.waveStartTimer >= gameSettings.waveStartDelay * 0.75)
+                    {
+                        var timeOffset = gameSettings.waveStartDelay * 0.75;
+                        app.screen.waveText.alpha = lerp(1, 0, (app.waveStartTimer - timeOffset) / (gameSettings.waveStartDelay  - timeOffset));
+                    }
+                    else
+                    {
+                        app.screen.waveText.alpha = 1;
+                    }
 
                     if(app.waveStartTimer <= 0)
                     {
                         app.state = "inwave";
+                        app.screen.waveText.alpha = 0;
+                    }
+                }
+            }
+
+            // If we're here, handle the wave spawning
+            if (app.state == "inwave")
+            {
+                if(app.nextSpawnTime > 0)
+                {
+                    app.nextSpawnTime -= dt;
+
+                    if(app.nextSpawnTime <= 0)
+                    {
+                        app.getNextSpawnTime();
+
+                        var randomEnemyIndex = Math.floor(Math.random() * gameSettings.waveDefs[app.currentWave - 1].enemyList.length );
+                        var randomEnemyName = gameSettings.waveDefs[app.currentWave - 1].enemyList[randomEnemyIndex];
+                        var randomEnemyInfo = enemySettings[randomEnemyName];
+                        
+                        if (randomEnemyInfo)
+                        {
+                            app.enemies.push(new Enemy(app.stage, randomEnemyName, randomEnemyInfo));
+                        }
+                        else
+                        {
+                            console.log("ERROR: Enemy name listed in waveDefs does not match an enemy in enemysettings.js");
+                        }
                     }
                 }
             }
@@ -246,6 +295,7 @@ var app = {
             this.screen = new GameScreen();
             this.state = "wavestart";
             this.createPlayer();
+            this.getNextSpawnTime();
             break;
 
             case "gameover":
@@ -302,7 +352,7 @@ var app = {
     // When the mouse is clicked, pass it on to the appropriate places
     handleMouseDown: function(evt)
     {
-        if(this.state == "gameplay")
+        if(this.state == "inwave" || this.state == "wavestart" || this.state == "postwave")
         {
             // fire a bullet
             if(this.fireRateTimer <= 0)
@@ -334,6 +384,13 @@ var app = {
     createPlayer: function()
     {
         app.player = new Actor(app.stage, "player", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT /2, 0.5, 0.5);
+    },
+
+    // What is our next spawn time?
+    getNextSpawnTime: function()
+    {
+        this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer + gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
+        console.log(this.nextSpawnTime);
     }
 
 }

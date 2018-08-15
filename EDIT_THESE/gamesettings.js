@@ -8,7 +8,12 @@ var gameSettings = {
     waveDefs: [
         {
             waveName: "default",    // This will use whatever string you put in, by default it will say "Wave" followed by the number
-
+            spawnRate: 5,           // How long it takes, in seconds, before the next enemy appears
+            spawnRateRandomizer: 3, // How much time, in seconds, might be added or substracted from the next spawn time
+            enemiesToClear: 5,      // How many enemies need to be killed before the next wave can start
+            enemyList: [            // What enemies can spawn in this wave? Add a name more than once to make it spawn more often
+                "basicEnemy"
+            ]
         }
     ],
 }

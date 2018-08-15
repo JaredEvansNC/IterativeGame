@@ -4,7 +4,7 @@ class Bullet {
         // create and parent the image
         this._container = new createjs.Container();
         this._image = new createjs.Shape();
-        this._image.graphics.beginFill("magenta").dr(0, 0, 15, 7.5);
+        this._image.graphics.beginFill("DarkTurquoise").dr(0, 0, 15, 7.5);
         parent.addChild(this._container);
         this._container.addChild(this._image);
 
