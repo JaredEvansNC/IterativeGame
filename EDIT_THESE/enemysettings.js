@@ -1,5 +1,5 @@
 var enemySettings = {
-    "basicEnemy" : {
+    "basicEnemy" : {    // This name is the name you use in the waveDefs array in gamesettings.js
         moveSpeed: 30, 
         movementType: "follow",
         health: 20,

@@ -91,3 +91,14 @@ function getDistance(pos1, pos2)
 
     return distance;
 }
+
+/*
+if()
+{
+
+}
+else
+{
+    console.log("ERROR: is not defined");
+}
+*/

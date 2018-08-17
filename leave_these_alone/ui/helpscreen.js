@@ -18,7 +18,7 @@ class HelpScreen extends ScreenBase
         var textInfo = { text: "BACK" };
         this.playButton = ui.makeSimpleButton(this, app.SCREEN_WIDTH / 2, 450, 200, 50, textInfo);
         this.playButton.callback = function(evt) {
-            app.gotoScreen("mainmenu");
+            app.gotoScreen("menus");
         }
      }
 }

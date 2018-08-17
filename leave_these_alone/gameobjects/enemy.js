@@ -11,6 +11,11 @@ class Enemy {
         parent.addChild(this._container);
         this._container.addChild(this._image);
 
+        if(!this.info.enemySize)
+        {
+            console.log("ERROR: enemySize is not defined for " + info.name);
+        }
+
         // Set the name
         this._name = name;
 
@@ -58,7 +63,27 @@ class Enemy {
         this._container.y = this._position.y;
         this._container.rotation = this._rotation;    // degrees
 
-        this._radius = this.info.collisionRadius;
+        this._radius = 20;
+
+        if(this.info.collisionRadius)
+        {
+            this._radius = this.info.collisionRadius;
+        }
+        else
+        {
+            console.log("ERROR: collisionRadius is not defined for enemy " + name);
+        }
+
+        this.health = 1;
+
+        if(this.info.health)
+        {
+            this.health = this.info.health;
+        }
+        else
+        {
+            console.log("ERROR: health is not defined for enemy " + name);
+        }
 
         if(gameSettings.DEBUG_MODE_ON)
         {
@@ -120,11 +145,22 @@ class Enemy {
         var distance = Math.sqrt(Math.pow((this._position.x - app.player.position.x), 2) + Math.pow((this._position.y - app.player.position.y), 2));
 
         // If the game object is far enough away, moves it towards the player
+        var moveSpeed = this.info.moveSpeed;    
+
+        if(this.info.moveSpeed)
+        {
+            moveSpeed = this.info.moveSpeed;
+        }
+        else
+        {
+            console.log("ERROR: moveSpeed is not defined for enemy " + this._name);
+        }
+
         if(distance > 15)
         {	
             // Move towards the player
-            this._position.x -= Math.cos(angleRad) * this.info.moveSpeed * dt;
-            this._position.y -= Math.sin(angleRad) * this.info.moveSpeed * dt;
+            this._position.x -= Math.cos(angleRad) * moveSpeed * dt;
+            this._position.y -= Math.sin(angleRad) * moveSpeed * dt;
         }
 
         // Update our position and rotation
@@ -162,23 +198,28 @@ class Enemy {
 
     onCollision(collidingObject)
     {
-        this.killEnemy();
+        this.health -= this.collidingObject.damage || this.health;
 
-        if(collidingObject instanceof Bullet)
+        if(this.health <= 0)
         {
-            app.enemiesKilledThisWave++;
+            this.killEnemy();
 
-            if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemiesToClear)
+            if(collidingObject instanceof Bullet)
             {
-                app.state = "postwave";
-                app.postWaveTimer = gameSettings.waveIsOverDelay;
-                app.currentWave++;
-                app.screen.waveText.text += " COMPLETE";
-                app.clearEnemies();
+                app.enemiesKilledThisWave++;
 
-                if (app.currentWave > gameSettings.waveDefs.length)
+                if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemiesToClear)
                 {
-                    app.screen.waveText.text = gameSettings.victoryMessage;
+                    app.state = "postwave";
+                    app.postWaveTimer = gameSettings.waveIsOverDelay;
+                    app.currentWave++;
+                    app.screen.waveText.text += " COMPLETE";
+                    app.clearEnemies();
+
+                    if (app.currentWave > gameSettings.waveDefs.length)
+                    {
+                        app.screen.waveText.text = gameSettings.victoryMessage;
+                    }
                 }
             }
         }

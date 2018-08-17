@@ -27,7 +27,27 @@ class Bullet {
         this._image.regX = this._image.getBounds().width/2;
         this._image.regY = this._image.getBounds().height/2;
 
-        this._radius = playerSettings.bulletCollisionRadius;
+        this._radius = 10;
+
+        if(playerSettings.bulletCollisionRadius)
+        {
+            this._radius = playerSettings.bulletCollisionRadius;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.bulletCollisionRadius is not defined");
+        }
+
+        this.damage = 5;
+
+        if(playerSettings.bulletDamage)
+        {
+            this.damage = playerSettings.bulletDamage;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.bulletDamage is not defined");
+        }
 
         if(gameSettings.DEBUG_MODE_ON)
         {
@@ -80,9 +100,20 @@ class Bullet {
 
     update(dt)
     {
+        var bulletSpeed = 50;
+
+        if(playerSettings.bulletSpeed)
+        {
+            bulletSpeed = playerSettings.bulletSpeed;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.bulletSpeed is not defined");
+        }
+
         // Update our position and rotation
-        this._position.x += Math.cos(this.getRotationRadians()) * playerSettings.bulletSpeed * dt;
-		this._position.y += Math.sin(this.getRotationRadians()) *  playerSettings.bulletSpeed  * dt;
+        this._position.x += Math.cos(this.getRotationRadians()) * bulletSpeed * dt;
+		this._position.y += Math.sin(this.getRotationRadians()) *  bulletSpeed  * dt;
         this._container.x = this._position.x;
         this._container.y = this._position.y; 
 

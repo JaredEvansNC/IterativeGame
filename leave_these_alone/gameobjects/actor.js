@@ -32,9 +32,27 @@ class Actor {
         this._image.regX = this._image.getBounds().width/2;
         this._image.regY = this._image.getBounds().height/2;
 
-        this._radius = playerSettings.collisionRadius;
+        this._radius = 25;
 
-        this.health = playerSettings.startingHealth;
+        this.health = 5;
+
+        if(playerSettings.collisionRadius)
+        {
+            this._radius = playerSettings.collisionRadius;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.collisionRadius is not defined");
+        }
+
+        if(playerSettings.startingHealth)
+        {
+            this.health = playerSettings.startingHealth;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.startingHealth is not defined");
+        }
 
         if(gameSettings.DEBUG_MODE_ON)
         {

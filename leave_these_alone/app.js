@@ -139,11 +139,11 @@ var app = {
                 app.bullets[i].update(dt);
             }
 
-             // Update all of our enemies
-             for (var i = 0; i < app.enemies.length; i++)
-             {
-                 app.enemies[i].update(dt);
-             }
+            // Update all of our enemies
+            for (var i = 0; i < app.enemies.length; i++)
+            {
+                app.enemies[i].update(dt);
+            }
 
             // Update the player
             app.player.update(dt);
@@ -156,6 +156,17 @@ var app = {
             {
                 app.fireRateTimer -= dt;
             }
+
+            var moveSpeed = 50;
+            if(playerSettings.moveSpeed)
+            {
+                moveSpeed = playerSettings.moveSpeed;
+            }
+            else
+            {
+                console.log("ERROR: playerSettings.moveSpeed is not defined");
+            }
+
 
             // Poll the keys and move the player character accordinlgy
             if(app.KEYCODE_LEFT.isPressed || app.KEYCODE_A.isPressed)
@@ -387,6 +398,7 @@ var app = {
     // When the mouse is clicked, pass it on to the appropriate places
     handleMouseDown: function(evt)
     {
+
         if(this.state == "inwave" || this.state == "wavestart" || this.state == "postwave")
         {
             // fire a bullet
@@ -396,7 +408,17 @@ var app = {
                 var xPos = app.player.position.x + (Math.cos(app.player.getRotationRadians()) * offset);
 		        var yPos = app.player.position.y + (Math.sin(app.player.getRotationRadians()) * offset);
                 app.bullets.push(new Bullet(this.stage, "bullet" + app.bullets.length, xPos, yPos, app.player.rotation));
-                this.fireRateTimer = playerSettings.fireRate;
+                this.fireRateTimer = 2;
+
+                if(playerSettings.fireRate)
+                {
+                    this.fireRateTimer = playerSettings.fireRate;
+                }
+                else
+                {
+                    console.log("ERROR: playerSettings.fireRate is not defined");
+                }
+                
             }
         }
         
