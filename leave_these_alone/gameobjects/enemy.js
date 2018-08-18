@@ -222,22 +222,51 @@ class Enemy {
         {
             this.killEnemy();
 
-            if(collidingObject instanceof Bullet)
+            app.enemiesKilledThisWave++;
+            app.enemiesKilledThisGame++;
+
+            app.screen.waveFill.updateFillbar();
+
+            app.addToScore(this.info.score ? this.info.score : 0);
+
+            if(this.info.droppedPickups && collidingObject instanceof Bullet)
             {
-                app.enemiesKilledThisWave++;
-                app.enemiesKilledThisGame++;
-
-                app.screen.waveFill.updateFillbar();
-
-                app.addToScore(this.info.score ? this.info.score : 1);
-
-                if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemiesToClear)
+                
+                for(var i = 0; i < this.info.droppedPickups.length; i++)
                 {
-                    app.state = "postwave";
-                    app.postWaveTimer = gameSettings.waveIsOverDelay;
+                    var makePickup = false;
+                    if(this.info.droppedPickups[i].dropChance >= 1)
+                    {
+                        makePickup = true;
+                    }
+                    else if(Math.random() <= this.info.droppedPickups[i].dropChance)
+                    {
+                        makePickup = true;
+                    }
+
+                    if(makePickup)
+                    {
+                       if(pickupSettings[this.info.droppedPickups[i].pickupName])
+                       {
+                        app.pickups.push(new Pickup(app.gamespace, this.info.droppedPickups[i].pickupName, pickupSettings[this.info.droppedPickups[i].pickupName], this._position.x, this._position.y ));
+                       }
+                       else
+                       {
+                            console.log("ERROR: trying to spawn pickup with name " + this.info.droppedPickups[i].pickupName + " which is not defined in pickupSettings ");
+                       }
+                    }
+                }
+            }
+
+            if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemyList.length)
+            {
+                app.state = "postwave";
+                app.postWaveTimer = gameSettings.waveIsOverDelay;
+                if( app.player.health > 0 )
+                {
                     app.currentWave++;
                     app.screen.waveText.text += " COMPLETE";
-                    app.clearEnemies();
+                    app.clearGameObjects();
 
                     if (app.currentWave > gameSettings.waveDefs.length)
                     {

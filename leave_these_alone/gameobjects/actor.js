@@ -91,6 +91,22 @@ class Actor {
     get rotation() { return this._rotation; }
     set rotation(r) { this._rotation = r; }
 
+    changeHealth(changeVal)
+    {
+
+        this.health = this.health + changeVal;
+
+        if(this.health > playerSettings.startingHealth)
+        {
+            this.health = playerSettings.startingHealth;
+        }
+
+        if(this.health < 0)
+        {
+            this.health = 0;
+        }
+    }
+
     getRotationRadians()
     {
         return this._rotation / 360 * 2 * Math.PI;    // degrees
@@ -117,7 +133,7 @@ class Actor {
 
     onCollision(collidingObject)
     {
-        this.health -= collidingObject.info.damage;
+        this.health -= collidingObject.info.damage ? collidingObject.info.damage : 0;
         
         app.screen.healthFill.updateFillbar();
 

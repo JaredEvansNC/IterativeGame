@@ -8,22 +8,41 @@ var enemySettings = {
         collisionRadius: 15,    // How easy it is to collide with this enemy
         enemySize: 25,          // How big this enemy's image is
         damage: 1,              // How much damage this enemy does when it touches the player
-        score: 10,              // How many points you earn for killing this enemy
         color: "fuchsia",       // What color is this enemy? Other colors can be found here: https://www.quackit.com/css/css_color_codes.cfm
         numberOfSides: 5,       // How many sides does this enemy's shape have?
+        droppedPickups: [       // What pickups does the enemy drop when it dies?
+            {
+                pickupName: "coin1",    // Which pickup from pickupSettings.js will be dropped
+                dropChance: 1,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+            },
+            {
+                pickupName: "coin1",    // Which pickup from pickupSettings.js will be dropped
+                dropChance: 0.66,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+            },
+            {
+                pickupName: "coin5",    // Which pickup from pickupSettings.js will be dropped
+                dropChance: 0.33,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+            },
+        ]
     },
 
-    "basicLineMoveEnemy" :
-    {    
-        moveSpeed: 30,  
-        movementType: "line",
-        health: 20,
-        collisionRadius: 70,
-        enemySize: 20,
-        damage: 1,
-        score: 20,
-        color: "magenta",   
-        numberOfSides: 3,       
+    "healthpackEnemy" :
+    {            
+        moveSpeed: 20, 
+        movementType: "follow",         
+        health: 4,             
+        collisionRadius: 30,    
+        enemySize: 15,           
+        damage: 3,  
+        color: "crimson",
+        numberOfSides: 3,
+        droppedPickups: [       
+            {
+                pickupName: "healthpack",    
+                dropChance: 1,          
+            },
+
+        ]        
     },
 
     "bossEnemy" :
@@ -34,8 +53,17 @@ var enemySettings = {
         collisionRadius: 40,    
         enemySize: 40,           
         damage: 5,  
-        score: 100,
         color: "DarkMagenta",
-        numberOfSides: 6,        
+        numberOfSides: 6,
+        droppedPickups: [       
+            {
+                pickupName: "coin5",    
+                dropChance: 1,         
+            },
+            {
+                pickupName: "coin5",    // Which pickup from pickupSettings.js will be dropped
+                dropChance: 1,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+            },
+        ]        
     },
 };

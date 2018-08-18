@@ -15,7 +15,7 @@ class GameScreen extends ScreenBase
         this.waveText.alpha = 0;
         this.updateWaveText();
 
-        ui.makeText(this, "SCORE", app.SCREEN_WIDTH - 15, 45, "12px Titan One", ui.defaultFont.color, "right");
+        ui.makeText(this, "COINS", app.SCREEN_WIDTH - 15, 45, "12px Titan One", ui.defaultFont.color, "right");
      
 
         // Health bar
@@ -30,8 +30,8 @@ class GameScreen extends ScreenBase
 
         var callback2 = function()
         {
-            this.fill.scaleX = app.enemiesKilledThisWave / gameSettings.waveDefs[app.currentWave - 1].enemiesToClear ;
-            this.text.text = app.enemiesKilledThisWave + " / " + gameSettings.waveDefs[app.currentWave - 1].enemiesToClear;
+            this.fill.scaleX = app.enemiesKilledThisWave / gameSettings.waveDefs[app.currentWave - 1].enemyList.length ;
+            this.text.text = app.enemiesKilledThisWave + " / " + gameSettings.waveDefs[app.currentWave - 1].enemyList.length;
         };
         this.waveFill = ui.makeFillbar(this, app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 30, 350, 30, ui.colors.dark, "teal", "18px Titan One", "white", callback2 );
         ui.makeText(this, "ENEMIES CLEARED", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 55, "14px Titan One", ui.defaultFont.color, "center");

@@ -23,6 +23,7 @@ var app = {
     // Game Settings
     FPS: 30,
     currentWave: 1,
+    enemiesSpawnedThisWave: 0,
     enemiesKilledThisWave: 0,
     enemiesKilledThisGame: 0,
 
@@ -38,6 +39,7 @@ var app = {
     // Asset management
     bullets: [],
     enemies: [],
+    pickups: [],
     player: null,
 
     // Track the particle emitters
@@ -154,6 +156,12 @@ var app = {
                 app.enemies[i].update(dt);
             }
 
+            // Update all of our pickups
+            for (var i = 0; i < app.pickups.length; i++)
+            {
+                app.pickups[i].update(dt);
+            }
+
             // Update the player
             app.player.update(dt);
 
@@ -249,17 +257,17 @@ var app = {
                 {
                     app.nextSpawnTime -= dt;
 
-                    if(app.nextSpawnTime <= 0)
+                    if(app.nextSpawnTime <= 0 && gameSettings.waveDefs[app.currentWave - 1].enemyList.length > app.enemiesSpawnedThisWave)
                     {
                         app.getNextSpawnTime();
 
-                        var randomEnemyIndex = Math.floor(Math.random() * gameSettings.waveDefs[app.currentWave - 1].enemyList.length );
-                        var randomEnemyName = gameSettings.waveDefs[app.currentWave - 1].enemyList[randomEnemyIndex];
-                        var randomEnemyInfo = enemySettings[randomEnemyName];
+                        var enemyName = gameSettings.waveDefs[app.currentWave - 1].enemyList[ app.enemiesSpawnedThisWave];
+                        var enemyInfo = enemySettings[enemyName];
                         
-                        if (randomEnemyInfo)
+                        if (enemyName)
                         {
-                            app.enemies.push(new Enemy(app.gamespace, randomEnemyName, randomEnemyInfo));
+                            app.enemies.push(new Enemy(app.gamespace, enemyName, enemyInfo));
+                            app.enemiesSpawnedThisWave++;
                         }
                         else
                         {
@@ -470,9 +478,17 @@ var app = {
         app.score = 0;
         app.gameTime = 0;
         app.currentWave = 1;
-        app.clearEnemies();
+        app.clearGameObjects();
         app.waveReset();
         app.enemiesKilledThisGame = 0;
+        
+        if(app.player)
+        {
+            app.player.health = playerSettings.startingHealth;
+
+        }
+
+
     },
 
     // Creates the player object
@@ -505,11 +521,21 @@ var app = {
         this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer + gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
     },
 
-    clearEnemies: function()
+    clearGameObjects: function()
     {
         for(i = app.enemies.length -1 ; i >= 0; i--)
         {
             app.enemies[i].killEnemy();
+        }
+
+        for(i = app.pickups.length -1 ; i >= 0; i--)
+        {
+            app.pickups[i].killPickup();
+        }
+
+        for(i = app.bullets.length -1 ; i >= 0; i--)
+        {
+            app.bullets[i].killBullet();
         }
     },
 
@@ -522,8 +548,9 @@ var app = {
             app.screen.waveText.alpha = 0;
         }
         app.waveStartTimer = gameSettings.waveStartDelay;
+        app.enemiesSpawnedThisWave = 0;
         app.enemiesKilledThisWave = 0;
-        
+        app.getNextSpawnTime();
         if(app.screen.waveFill)
         {
             app.screen.waveFill.updateFillbar();
