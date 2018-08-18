@@ -137,8 +137,8 @@ var ui = {
         fillbar.container.addChild(fillbar.fill);
 
         // Add Percentage Text
-        fillbar.text = ui.makeText(fillbar.container, "", w/2, h/2, textFont, textColor);
-    
+        fillbar.text = ui.makeText(fillbar.container, "", w/2, h/2 - 1, textFont, textColor);
+
         fillbar.updateFillbar = callback;
 
         return fillbar;

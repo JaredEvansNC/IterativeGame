@@ -10,7 +10,7 @@ class HelpScreen extends ScreenBase
         // Instructions
         for(var i = 0; i < uiSettings.HELP_LINES.length; i++)
         {
-            ui.makeText(this, uiSettings.HELP_LINES[i], app.SCREEN_WIDTH / 2, 265 + 45 * i - (45 * (uiSettings.HELP_LINES.length - 1) / 2), ui.defaultFont.font, ui.defaultFont.color);
+            ui.makeText(this, uiSettings.HELP_LINES[i], app.SCREEN_WIDTH / 2, 245 + 65 * i - (45 * (uiSettings.HELP_LINES.length - 1) / 2), ui.defaultFont.font, ui.defaultFont.color);
         }
         
 

@@ -7,7 +7,7 @@ class Enemy {
         // create and parent the image
         this._container = new createjs.Container();
         this._image = new createjs.Shape();
-        this._image.graphics.beginFill("magenta").dp(0, 0, this.info.enemySize || 20, 6);
+        this._image.graphics.beginFill(info.color ? info.color : "magenta").dp(0, 0, this.info.enemySize ? this.info.enemySize : 20, this.info.numberOfSides ? this.info.numberOfSides : 6);
         parent.addChild(this._container);
         this._container.addChild(this._image);
 
@@ -207,6 +207,11 @@ class Enemy {
             if(collidingObject instanceof Bullet)
             {
                 app.enemiesKilledThisWave++;
+                app.enemiesKilledThisGame++;
+
+                app.screen.waveFill.updateFillbar();
+
+                app.addToScore(this.info.score ? this.info.score : 1);
 
                 if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemiesToClear)
                 {

@@ -27,6 +27,14 @@ class GameScreen extends ScreenBase
 
         this.healthFill = ui.makeFillbar(this, 115, 25, 200, 25, ui.colors.dark, "red", "14px Titan One", "white", callback );
         ui.makeText(this, "HEALTH", 15, 45, "12px Titan One", ui.defaultFont.color, "left");
+
+        var callback2 = function()
+        {
+            this.fill.scaleX = app.enemiesKilledThisWave / gameSettings.waveDefs[app.currentWave - 1].enemiesToClear ;
+            this.text.text = app.enemiesKilledThisWave + " / " + gameSettings.waveDefs[app.currentWave - 1].enemiesToClear;
+        };
+        this.waveFill = ui.makeFillbar(this, app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 30, 350, 30, ui.colors.dark, "teal", "18px Titan One", "white", callback2 );
+        ui.makeText(this, "ENEMIES CLEARED", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 55, "10px Titan One", ui.defaultFont.color, "center");
     }
 
     updateWaveText()

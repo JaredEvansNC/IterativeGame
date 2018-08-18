@@ -15,7 +15,7 @@ var gameSettings = {
             enemiesToClear: 3,      // How many enemies need to be killed before the next wave can start
             enemyList: [            // What enemies can spawn in this wave? Add a name more than once to make it spawn more often
                 "basicEnemy"
-            ]
+            ],
         },
         {
             waveName: "Ultimate Wave",

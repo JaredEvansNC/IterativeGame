@@ -1,5 +1,5 @@
 class Bullet {
-    constructor(parent, name = "bullet", x = 0, y = 0, rotation = 0, scaleX = 1, scaleY = 1)
+    constructor(parent, name = "bullet", x = 0, y = 0, rotation = 0, scale = 1)
     {
         // create and parent the image
         this._container = new createjs.Container();
@@ -18,8 +18,7 @@ class Bullet {
         // Set the attributes of the container
         this._container.x = this._position.x;
         this._container.y = this._position.y;
-        this._container.scaleX = scaleX;
-        this._container.scaleY = scaleY;
+        this._container.scale = scale;
         this._container.rotation = this._rotation;    // degrees
 
         // Set a central reg x point
@@ -52,7 +51,7 @@ class Bullet {
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
-            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius);
+            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius/this.container.scale);
             this._container.addChild(this.debugShape);
         }
     }

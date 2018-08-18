@@ -1,5 +1,5 @@
 class Actor {
-    constructor(parent, name = "actor", x = 0, y = 0, scaleX = 1, scaleY = 1, rotation = 0)
+    constructor(parent, name = "actor", x = 0, y = 0, scale = 1, rotation = 0)
     {
         // create and parent the image
         this._container = new createjs.Container();
@@ -23,8 +23,7 @@ class Actor {
         // Set the attributes of the container
         this._container.x = this._position.x;
         this._container.y = this._position.y;
-        this._container.scaleX = scaleX;
-        this._container.scaleY = scaleY;
+        this._container.scale = scale;
         this._container.rotation = this._rotation;    // degrees
 
         // Set a central reg x point
@@ -57,7 +56,7 @@ class Actor {
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
-            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius);
+            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius / this._container.scale);
             this._container.addChild(this.debugShape);
         }
     }

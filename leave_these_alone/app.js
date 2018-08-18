@@ -23,6 +23,7 @@ var app = {
     FPS: 30,
     currentWave: 1,
     enemiesKilledThisWave: 0,
+    enemiesKilledThisGame: 0,
 
     // menus
     // wavestart
@@ -362,6 +363,7 @@ var app = {
             this.createPlayer();
             this.screen.healthFill.updateFillbar();
             this.getNextSpawnTime();
+            app.screen.waveFill.updateFillbar();
             break;
 
             case "gameover":
@@ -427,7 +429,7 @@ var app = {
                 var offset = 30;
                 var xPos = app.player.position.x + (Math.cos(app.player.getRotationRadians()) * offset);
 		        var yPos = app.player.position.y + (Math.sin(app.player.getRotationRadians()) * offset);
-                app.bullets.push(new Bullet(this.stage, "bullet" + app.bullets.length, xPos, yPos, app.player.rotation));
+                app.bullets.push(new Bullet(this.stage, "bullet" + app.bullets.length, xPos, yPos, app.player.rotation, playerSettings.bulletSize));
                 this.fireRateTimer = 2;
 
                 if(playerSettings.fireRate)
@@ -448,6 +450,7 @@ var app = {
     addToScore: function(points)
     {
         app.score += points;
+        app.screen.scoreUI.text = app.score;
     },
 
     // Called whenever we need to reset the game
@@ -456,13 +459,24 @@ var app = {
         app.score = 0;
         app.gameTime = 0;
         app.clearEnemies();
-        app.waveReset();  
+        app.waveReset();
+        app.enemiesKilledThisGame = 0;
     },
 
     // Creates the player object
     createPlayer: function()
     {
-        app.player = new Actor(app.stage, "player", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT /2, 0.5, 0.5);
+        var scale = 1;
+        if(playerSettings.playerSize)
+        {
+            scale = playerSettings.playerSize;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.playerSize is not defined");
+        }
+
+        app.player = new Actor(app.stage, "player", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT /2, scale);
     },
 
     // What is our next spawn time?
@@ -488,6 +502,11 @@ var app = {
         }
         app.waveStartTimer = gameSettings.waveStartDelay;
         app.enemiesKilledThisWave = 0;
+        
+        if(app.screen.waveFill)
+        {
+            app.screen.waveFill.updateFillbar();
+        }
     }
 
 }
