@@ -115,7 +115,7 @@ var ui = {
         return newButton;
     },
 
-    makeFillbar(parent, x, y, w, h, backColor = ui.colors.dark, fillColor = ui.color.light, textFont = ui.defaultFont.font, textColor = "white", callback)
+    makeFillbar(parent, x, y, w, h, backColor = ui.colors.dark, fillColor = ui.color.light, textFont = ui.defaultFont.font, textColor = "white", callback, borderSize = 5)
     {
         var fillbar = {};
 
@@ -133,7 +133,7 @@ var ui = {
         fillbar.container.addChild(fillbar.back);
 
         fillbar.fill = new createjs.Shape();
-        fillbar.fill.graphics.beginFill(fillColor).drawRect(5, 5, w - 10, h - 10);
+        fillbar.fill.graphics.beginFill(fillColor).drawRect(borderSize, borderSize, w - (borderSize * 2), h - (borderSize * 2));
         fillbar.container.addChild(fillbar.fill);
 
         // Add Percentage Text

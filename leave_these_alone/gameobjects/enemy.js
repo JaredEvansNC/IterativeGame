@@ -61,7 +61,7 @@ class Enemy {
         // Set the attributes of the container
         this._container.x = this._position.x;
         this._container.y = this._position.y;
-        this._container.rotation = this._rotation;    // degrees
+        this._image.rotation = this._rotation;    // degrees
 
         this._radius = 20;
 
@@ -84,6 +84,22 @@ class Enemy {
         {
             console.log("ERROR: health is not defined for enemy " + name);
         }
+
+
+        // Add a healthbar
+        var callback = function(enemy)
+        {
+            this.text.text = enemy.health + "/" + enemy.info.health;
+            this.fill.scaleX = enemy.health / enemy.info.health;
+
+            if(!this.container.visible)
+            {
+                this.container.visible = true;
+            }
+        };
+        var barPos = this.info.enemySize ? this.info.enemySize : 20;
+        this.healthBar = ui.makeFillbar(this.container, 0, -10 - barPos, 75, 15, ui.colors.dark, "red", "12px Titan One", "white", callback, 2);
+        this.healthBar.container.visible = false;
 
         if(gameSettings.DEBUG_MODE_ON)
         {
@@ -166,7 +182,7 @@ class Enemy {
         // Update our position and rotation
         this._container.x = this._position.x;
         this._container.y = this._position.y;
-        this._container.rotation = this._rotation - 90;
+        this._image.rotation = this._rotation - 90;
 
         // Test for collisions
         var enemy = this;
@@ -199,6 +215,8 @@ class Enemy {
     onCollision(collidingObject)
     {
         this.health -= collidingObject.damage ? collidingObject.damage : this.health;
+
+        this.healthBar.updateFillbar(this);
 
         if(this.health <= 0)
         {

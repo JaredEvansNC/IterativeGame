@@ -34,7 +34,7 @@ class GameScreen extends ScreenBase
             this.text.text = app.enemiesKilledThisWave + " / " + gameSettings.waveDefs[app.currentWave - 1].enemiesToClear;
         };
         this.waveFill = ui.makeFillbar(this, app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 30, 350, 30, ui.colors.dark, "teal", "18px Titan One", "white", callback2 );
-        ui.makeText(this, "ENEMIES CLEARED", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 55, "10px Titan One", ui.defaultFont.color, "center");
+        ui.makeText(this, "ENEMIES CLEARED", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 55, "14px Titan One", ui.defaultFont.color, "center");
     }
 
     updateWaveText()
