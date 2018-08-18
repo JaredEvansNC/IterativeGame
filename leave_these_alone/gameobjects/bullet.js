@@ -51,7 +51,7 @@ class Bullet {
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
-            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius/this.container.scale);
+            this.debugShape.graphics.beginStroke("black").drawCircle(0,0, this._radius/this.container.scale);
             this._container.addChild(this.debugShape);
         }
     }
@@ -129,7 +129,7 @@ class Bullet {
 
     killBullet()
     {
-        app.stage.removeChild(this._container);
+        app.gamespace.removeChild(this._container);
         app.bullets.splice(app.bullets.indexOf(this), 1);
     }
 

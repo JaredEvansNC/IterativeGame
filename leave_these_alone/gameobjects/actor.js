@@ -56,7 +56,7 @@ class Actor {
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
-            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius / this._container.scale);
+            this.debugShape.graphics.beginStroke("black").drawCircle(0,0, this._radius / this._container.scale);
             this._container.addChild(this.debugShape);
         }
     }

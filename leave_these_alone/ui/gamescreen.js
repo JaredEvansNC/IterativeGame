@@ -5,7 +5,7 @@ class GameScreen extends ScreenBase
         super();
 
         // Change the background color
-        this.color = '#adff5b';
+        this._fillShape.visible = false;
 
         // Make a ui entry to track the number of clicks
         this.scoreUI = ui.makeText(this, app.score, app.SCREEN_WIDTH - 15, 25, ui.defaultFont.font, ui.defaultFont.color, "right");

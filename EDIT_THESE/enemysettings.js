@@ -5,7 +5,7 @@ var enemySettings = {
         moveSpeed: 30,          // How fast this enemy moves
         movementType: "follow", // What movement pattern does this enemy use? can be 'follow', 'line', 'wave'
         health: 2,              // How much health does this enemy have
-        collisionRadius: 70,    // How easy it is to collide with this enemy
+        collisionRadius: 15,    // How easy it is to collide with this enemy
         enemySize: 25,          // How big this enemy's image is
         damage: 1,              // How much damage this enemy does when it touches the player
         score: 10,              // How many points you earn for killing this enemy

@@ -104,7 +104,7 @@ class Enemy {
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
-            this.debugShape.graphics.beginStroke("red").drawCircle(0,0, this._radius);
+            this.debugShape.graphics.beginStroke("black").drawCircle(0,0, this._radius);
             this._container.addChild(this.debugShape);
         }
     }
@@ -208,7 +208,7 @@ class Enemy {
     
     killEnemy()
     {
-        app.stage.removeChild(this._container);
+        app.gamespace.removeChild(this._container);
         app.enemies.splice(app.enemies.indexOf(this), 1);
     }
 

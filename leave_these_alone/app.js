@@ -4,6 +4,7 @@ var app = {
 
     // This will hold the stage variable needed for createJS
     stage: null,
+    gamespace: null,
  
     // Store a reference to the game canvas and the context
     canvas: null,
@@ -75,6 +76,13 @@ var app = {
     init: function () {
         // Sets up the canvas and our screen
         this.setupCanvas(); 
+        this.gamespace = new createjs.Container();
+        this.gamespace.setBounds(0, 0, this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+        var background = new createjs.Shape();
+        background.graphics.beginFill('#adff5b').dr(0, 0, this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+        this.stage.addChild(this.gamespace);
+        this.gamespace.addChild(background);
+
         this.screen = new createjs.Container();
         this.screen.setBounds(0, 0, this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
         this.stage.addChild(this.screen);
@@ -251,7 +259,7 @@ var app = {
                         
                         if (randomEnemyInfo)
                         {
-                            app.enemies.push(new Enemy(app.stage, randomEnemyName, randomEnemyInfo));
+                            app.enemies.push(new Enemy(app.gamespace, randomEnemyName, randomEnemyInfo));
                         }
                         else
                         {
@@ -287,12 +295,15 @@ var app = {
 
                         if(app.postWaveTimer <= 0)
                         {
-                            app.waveReset();
                             
                             // If the game is over, end it now
                             if(app.currentWave > gameSettings.waveDefs.length)
                             {
                                 app.gotoScreen("gameover");
+                            }
+                            else
+                            {
+                                app.waveReset();
                             }
                         }
                     }
@@ -429,7 +440,7 @@ var app = {
                 var offset = 30;
                 var xPos = app.player.position.x + (Math.cos(app.player.getRotationRadians()) * offset);
 		        var yPos = app.player.position.y + (Math.sin(app.player.getRotationRadians()) * offset);
-                app.bullets.push(new Bullet(this.stage, "bullet" + app.bullets.length, xPos, yPos, app.player.rotation, playerSettings.bulletSize));
+                app.bullets.push(new Bullet(this.gamespace, "bullet" + app.bullets.length, xPos, yPos, app.player.rotation, playerSettings.bulletSize));
                 this.fireRateTimer = 2;
 
                 if(playerSettings.fireRate)
@@ -458,6 +469,7 @@ var app = {
     {
         app.score = 0;
         app.gameTime = 0;
+        app.currentWave = 1;
         app.clearEnemies();
         app.waveReset();
         app.enemiesKilledThisGame = 0;
@@ -466,17 +478,25 @@ var app = {
     // Creates the player object
     createPlayer: function()
     {
-        var scale = 1;
-        if(playerSettings.playerSize)
+        if(!app.player)
         {
-            scale = playerSettings.playerSize;
+
+            var scale = 1;
+            if(playerSettings.playerSize)
+            {
+                scale = playerSettings.playerSize;
+            }
+            else
+            {
+                console.log("ERROR: playerSettings.playerSize is not defined");
+            }
+
+            app.player = new Actor(app.gamespace, "player", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT /2, scale);
         }
         else
         {
-            console.log("ERROR: playerSettings.playerSize is not defined");
+            app.player.position = {x: app.SCREEN_WIDTH / 2, y: app.SCREEN_HEIGHT /2}
         }
-
-        app.player = new Actor(app.stage, "player", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT /2, scale);
     },
 
     // What is our next spawn time?
@@ -487,9 +507,10 @@ var app = {
 
     clearEnemies: function()
     {
-        app.enemies.forEach(function(enemy){
-            enemy.killEnemy();
-        });
+        for(i = app.enemies.length -1 ; i >= 0; i--)
+        {
+            app.enemies[i].killEnemy();
+        }
     },
 
     waveReset: function()
