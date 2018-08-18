@@ -198,7 +198,7 @@ class Enemy {
 
     onCollision(collidingObject)
     {
-        this.health -= this.collidingObject.damage || this.health;
+        this.health -= collidingObject.damage ? collidingObject.damage : this.health;
 
         if(this.health <= 0)
         {

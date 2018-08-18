@@ -197,35 +197,45 @@ var app = {
             // Update the prewave sequence if we're here
             if (app.state == "wavestart")
             {
-                if(app.waveStartTimer > 0)
+                if(gameSettings.waveStartDelay)
                 {
-                    app.waveStartTimer -= dt;
-
-                    if(app.waveStartTimer <= gameSettings.waveStartDelay * 0.25)
+                    if(app.waveStartTimer > 0)
                     {
-                        app.screen.waveText.alpha = lerp(0, 1, app.waveStartTimer / (gameSettings.waveStartDelay * 0.25));
-                    }
-                    else if (app.waveStartTimer >= gameSettings.waveStartDelay * 0.75)
-                    {
-                        var timeOffset = gameSettings.waveStartDelay * 0.75;
-                        app.screen.waveText.alpha = lerp(1, 0, (app.waveStartTimer - timeOffset) / (gameSettings.waveStartDelay  - timeOffset));
-                    }
-                    else
-                    {
-                        app.screen.waveText.alpha = 1;
-                    }
-
-                    if(app.waveStartTimer <= 0)
-                    {
-                        app.state = "inwave";
-                        app.screen.waveText.alpha = 0;
+                        app.waveStartTimer -= dt;
+    
+                        if(app.waveStartTimer <= gameSettings.waveStartDelay * 0.25)
+                        {
+                            app.screen.waveText.alpha = lerp(0, 1, app.waveStartTimer / (gameSettings.waveStartDelay * 0.25));
+                        }
+                        else if (app.waveStartTimer >= gameSettings.waveStartDelay * 0.75)
+                        {
+                            var timeOffset = gameSettings.waveStartDelay * 0.75;
+                            app.screen.waveText.alpha = lerp(1, 0, (app.waveStartTimer - timeOffset) / (gameSettings.waveStartDelay  - timeOffset));
+                        }
+                        else
+                        {
+                            app.screen.waveText.alpha = 1;
+                        }
+    
+                        if(app.waveStartTimer <= 0)
+                        {
+                            app.state = "inwave";
+                            app.screen.waveText.alpha = 0;
+                        }
                     }
                 }
+                else
+                {
+                    console.log("ERROR: gameSettings.waveStartDelay is not defined");
+                }
+
+                
             }
 
             // If we're here, handle the wave spawning
             if (app.state == "inwave")
             {
+
                 if(app.nextSpawnTime > 0)
                 {
                     app.nextSpawnTime -= dt;
@@ -248,39 +258,48 @@ var app = {
                         }
                     }
                 }
+
             }
 
             // If we're here, handle the post wave sequence
             if (app.state == "postwave")
             {
-                if(app.postWaveTimer > 0)
+                if(gameSettings.waveIsOverDelay)
                 {
-                    app.postWaveTimer -= dt;
+                    if(app.postWaveTimer > 0)
+                    {
+                        app.postWaveTimer -= dt;
 
-                    if(app.postWaveTimer <= gameSettings.waveIsOverDelay * 0.25)
-                    {
-                        app.screen.waveText.alpha = lerp(0, 1, app.postWaveTimer / (gameSettings.waveIsOverDelay * 0.25));
-                    }
-                    else if (app.postWaveTimer >= gameSettings.waveIsOverDelay * 0.75)
-                    {
-                        var timeOffset = gameSettings.waveIsOverDelay * 0.75;
-                        app.screen.waveText.alpha = lerp(1, 0, (app.postWaveTimer - timeOffset) / (gameSettings.waveIsOverDelay  - timeOffset));
-                    }
-                    else
-                    {
-                        app.screen.waveText.alpha = 1;
-                    }
-
-                    if(app.postWaveTimer <= 0)
-                    {
-                        app.waveReset();
-                        
-                        // If the game is over, end it now
-                        if(app.currentWave > gameSettings.waveDefs.length)
+                        if(app.postWaveTimer <= gameSettings.waveIsOverDelay * 0.25)
                         {
-                            app.gotoScreen("gameover");
+                            app.screen.waveText.alpha = lerp(0, 1, app.postWaveTimer / (gameSettings.waveIsOverDelay * 0.25));
+                        }
+                        else if (app.postWaveTimer >= gameSettings.waveIsOverDelay * 0.75)
+                        {
+                            var timeOffset = gameSettings.waveIsOverDelay * 0.75;
+                            app.screen.waveText.alpha = lerp(1, 0, (app.postWaveTimer - timeOffset) / (gameSettings.waveIsOverDelay  - timeOffset));
+                        }
+                        else
+                        {
+                            app.screen.waveText.alpha = 1;
+                        }
+
+                        if(app.postWaveTimer <= 0)
+                        {
+                            app.waveReset();
+                            
+                            // If the game is over, end it now
+                            if(app.currentWave > gameSettings.waveDefs.length)
+                            {
+                                app.gotoScreen("gameover");
+                            }
                         }
                     }
+
+                }
+                else
+                {
+                    console.log("ERROR: gameSettings.waveIsOverDelay is not defined");
                 }
             }
 
@@ -341,6 +360,7 @@ var app = {
             this.screen = new GameScreen();
             this.state = "wavestart";
             this.createPlayer();
+            this.screen.healthFill.updateFillbar();
             this.getNextSpawnTime();
             break;
 

@@ -119,7 +119,8 @@ class Actor {
     onCollision(collidingObject)
     {
         this.health -= collidingObject.info.damage;
-        console.log("Player health is now " + this.health );
+        
+        app.screen.healthFill.updateFillbar();
 
         if (this.health <= 0)
         {

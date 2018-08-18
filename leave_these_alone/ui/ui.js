@@ -115,6 +115,35 @@ var ui = {
         return newButton;
     },
 
+    makeFillbar(parent, x, y, w, h, backColor = ui.colors.dark, fillColor = ui.color.light, textFont = ui.defaultFont.font, textColor = "white", callback)
+    {
+        var fillbar = {};
+
+        fillbar.container = new createjs.Container();
+        fillbar.container.x = x;
+        fillbar.container.y = y;
+        fillbar.container.setBounds(0, 0, w, h);
+        fillbar.container.regX = w / 2;
+        fillbar.container.regY = h / 2;
+        parent.addChild(fillbar.container);
+
+        // Add a fillbar
+        fillbar.back = new createjs.Shape();
+        fillbar.back.graphics.beginFill(backColor).drawRect(0, 0, w, h);
+        fillbar.container.addChild(fillbar.back);
+
+        fillbar.fill = new createjs.Shape();
+        fillbar.fill.graphics.beginFill(fillColor).drawRect(5, 5, w - 10, h - 10);
+        fillbar.container.addChild(fillbar.fill);
+
+        // Add Percentage Text
+        fillbar.text = ui.makeText(fillbar.container, "", w/2, h/2, textFont, textColor);
+    
+        fillbar.updateFillbar = callback;
+
+        return fillbar;
+    },
+
 };
 
 //  // Create a text object

@@ -1,8 +1,8 @@
 var uiSettings = {
-    // Main Menu
+    // Main Menu text
     TITLE_TEXT: "ITERATIVE SHOOTER GAME",
 
-    // Help Screen
+    // Help Screen text
     HELP_TITLE: "HOW TO PLAY" ,
     HELP_LINES: [
         "MOVE WITH W A S D",
