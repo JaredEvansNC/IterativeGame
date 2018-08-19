@@ -1,3 +1,4 @@
+// A few different UI text settings
 var uiSettings = {
     // Main Menu text
     TITLE_TEXT: "ITERATIVE SHOOTER GAME",
