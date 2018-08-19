@@ -3,7 +3,6 @@ var enemySettings = {
     "basicEnemy" :              // This name is the name you use in the waveDefs array in gamesettings.js
     {           
         moveSpeed: 30,          // How fast this enemy moves
-        movementType: "follow", // What movement pattern does this enemy use? can be 'follow', 'line', 'wave'
         health: 2,              // How much health does this enemy have
         collisionRadius: 15,    // How easy it is to collide with this enemy
         enemySize: 25,          // How big this enemy's image is
@@ -17,19 +16,25 @@ var enemySettings = {
             },
             {
                 pickupName: "coin1",    // Which pickup from pickupSettings.js will be dropped
-                dropChance: 0.66,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+                dropChance: 0.66,       // How likely it is to drop, 0 to 1, 1 being 100% chance
             },
             {
                 pickupName: "coin5",    // Which pickup from pickupSettings.js will be dropped
-                dropChance: 0.33,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+                dropChance: 0.33,       // How likely it is to drop, 0 to 1, 1 being 100% chance
             },
-        ]
+        ],
+        bulletSettings : {          // If this enemy fires bullets, give those bullets settings
+            fireRate: 0,            // How fast this enemy fires bullets. If 0, this enemy doesn't fire bullets
+            damage: 0,              // How much damage each bullet does
+            bulletSpeed: 0,         // How fast this enemy's bullets travel
+            bulletSize: 0,          // How big are these bullets
+            color: "Plum"           // What color are they
+        }
     },
 
     "healthpackEnemy" :
     {            
-        moveSpeed: 20, 
-        movementType: "follow",         
+        moveSpeed: 20,         
         health: 4,             
         collisionRadius: 30,    
         enemySize: 15,           
@@ -42,13 +47,40 @@ var enemySettings = {
                 dropChance: 1,          
             },
 
-        ]        
+        ],
+        bulletSettings : {          
+            fireRate: 0,            
+            damage: 0,        
+            bulletSpeed: 0,         
+            bulletSize: 0,          
+            color: "Plum"      
+        } 
     },
+
+    "bulletEnemy" :
+    {            
+        moveSpeed: 5,         
+        health: 3,             
+        collisionRadius: 30,    
+        enemySize: 15,           
+        damage: 3,  
+        color: "orchid",
+        numberOfSides: 7,
+        droppedPickups: [       
+        ],
+        bulletSettings : {          
+            fireRate: 4,            
+            damage: 1,        
+            bulletSpeed: 30,         
+            bulletSize: 15,          
+            color: "Plum"      
+        } 
+    },
+
 
     "bossEnemy" :
     {            
-        moveSpeed: 10, 
-        movementType: "follow",         
+        moveSpeed: 10,        
         health: 50,             
         collisionRadius: 40,    
         enemySize: 40,           
@@ -64,6 +96,13 @@ var enemySettings = {
                 pickupName: "coin5",    // Which pickup from pickupSettings.js will be dropped
                 dropChance: 1,          // How likely it is to drop, 0 to 1, 1 being 100% chance
             },
-        ]        
+        ],
+        bulletSettings : {          
+            fireRate: 0,            
+            damage: 0,        
+            bulletSpeed: 0,         
+            bulletSize: 0,          
+            color: "Plum"      
+        }         
     },
 };

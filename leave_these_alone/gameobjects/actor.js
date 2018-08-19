@@ -124,6 +124,15 @@ class Actor {
         this._container.x = this._position.x;
         this._container.y = this._position.y;
         this._container.rotation = this._rotation - 90;
+
+        var player = this;
+        app.enemyBullets.forEach(function(bullet){
+            if(areActorsColliding(player, bullet))
+            {
+                player.onCollision(bullet);
+                bullet.onCollision(player);
+            }
+        });
     }
 
     draw(dt)

@@ -38,6 +38,7 @@ var app = {
 
     // Asset management
     bullets: [],
+    enemyBullets: [],
     enemies: [],
     pickups: [],
     player: null,
@@ -148,6 +149,11 @@ var app = {
             for (var i = 0; i < app.bullets.length; i++)
             {
                 app.bullets[i].update(dt);
+            }
+
+            for (var i = 0; i < app.enemyBullets.length; i++)
+            {
+                app.enemyBullets[i].update(dt);
             }
 
             // Update all of our enemies
@@ -536,6 +542,11 @@ var app = {
         for(i = app.bullets.length -1 ; i >= 0; i--)
         {
             app.bullets[i].killBullet();
+        }
+
+        for(i = app.enemyBullets.length -1 ; i >= 0; i--)
+        {
+            app.enemyBullets[i].killBullet();
         }
     },
 

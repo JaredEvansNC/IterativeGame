@@ -101,6 +101,8 @@ class Enemy {
         this.healthBar = ui.makeFillbar(this.container, 0, -10 - barPos, 75, 15, ui.colors.dark, "red", "12px Titan One", "white", callback, 2);
         this.healthBar.container.visible = false;
 
+        this.shootTimer = this.info.bulletSettings.fireRate;
+
         if(gameSettings.DEBUG_MODE_ON)
         {
             this.debugShape = new createjs.Shape();
@@ -198,6 +200,18 @@ class Enemy {
         {
             enemy.onCollision(app.player);
             app.player.onCollision(enemy);
+        }
+
+        if(this.info.bulletSettings.fireRate > 0)
+        {
+            this.shootTimer -= dt;
+
+            if(this.shootTimer <= 0)
+            {
+                this.shootTimer = this.info.bulletSettings.fireRate;
+
+                app.enemyBullets.push(new EnemyBullet(app.gamespace, "ebullet" + app.enemyBullets.length, this._position.x, this._position.y, this._rotation, this.info.bulletSettings));
+            }
         }
     }
 

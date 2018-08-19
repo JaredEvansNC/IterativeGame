@@ -15,17 +15,17 @@ var gameSettings = {
             enemyList: [            // What enemies will spawn this wave. Enemies will spawn in this order.
                 "basicEnemy", 
                 "basicEnemy", 
-                "healthpackEnemy", 
+                "bulletEnemy", 
             ],
         },
         {
-            waveName: "Ultimate Wave",
+            waveName: "Final Wave",
             spawnRate: 3,           
             spawnRateRandomizer: 2, 
             enemyList: [            
                 "basicEnemy",
-                "basicEnemy",
-                "basicEnemy",
+                "bulletEnemy",
+                "healthpackEnemy",
                 "basicEnemy",
                 "bossEnemy",
             ]
