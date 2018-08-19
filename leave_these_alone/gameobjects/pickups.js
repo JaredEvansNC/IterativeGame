@@ -11,12 +11,24 @@ class Pickup {
         parent.addChild(this._container);
         this._container.addChild(this._image);
 
-        if(!this.info.imageSize)
+        if(!info.color)
         {
-            console.log("ERROR: enemySize is not defined for " + info.name);
+            console.log("WARNING: color is not defined for " + name);
         }
 
-        this.text = ui.makeText(this._container, this.info.displayText, 0,0, (this.info.imageSize - 0) + "px Titan One", this.info.textColor ? this.info.textColor : ui.colors.dark, "center");;
+        if(!this.info.imageSize)
+        {
+            console.log("ERROR: imageSize is not defined for " + name);
+        }
+
+        var dispText = info.displayText ? info.displayText : "WARNING: displayText not defined"
+        
+        this.text = ui.makeText(this._container, dispText, 0,0, (this.info.imageSize - 0) + "px Titan One", this.info.textColor ? this.info.textColor : ui.colors.dark, "center");;
+
+        if(!info.textColor)
+        {
+            console.log("WARNING: textColor is not defined for " + name);
+        }
 
         // Set the name
         this._name = name;
@@ -45,7 +57,7 @@ class Pickup {
         }
         else
         {
-            console.log("ERROR: collisionRadius is not defined for enemy " + name);
+            console.log("ERROR: collisionRadius is not defined for pickup " + name);
         }
 
         // Add a timerbar
@@ -62,7 +74,12 @@ class Pickup {
         this.timerBar = ui.makeFillbar(this._container, 0, 10 + barPos, 30, 8, ui.colors.dark, "orange", "8px Titan One", "SaddleBrown", callback, 2);
         this.timerBar.container.visible = false;
 
-        this.timeLeft = this.info.timeToLive;
+        this.timeLeft = this.info.timeToLive ? this.info.timeToLive : 3;
+
+        if(!info.timeToLive)
+        {
+            console.log("WARNING: timeToLive is not defined for " + name);
+        }
 
         if(gameSettings.DEBUG_MODE_ON)
         {
@@ -162,36 +179,48 @@ class Pickup {
 
     onCollision()
     {
-     
-        if(this.info.changeInHealth !== 0)
+    
+        var somethingHappened = false;
+
+        if(this.info.changeInHealth && this.info.changeInHealth !== 0)
         {
             app.player.changeHealth(this.info.changeInHealth);
+            somethingHappened = true;
         }
 
-        if(this.info.changeInScore !== 0)
+        if(this.info.changeInScore && this.info.changeInScore !== 0)
         {
             app.score += this.info.changeInScore;
             app.screen.scoreUI.text = app.score;
+            somethingHappened = true;
         }
 
-        if(this.info.changeInDamage !== 0)
+        if(this.info.changeInDamage && this.info.changeInDamage !== 0)
         {
             app.player.bulletDamage += this.info.changeInDamage;
             app.screen.updatePlayerStats("damage");
+            somethingHappened = true;
         }
 
-        if(this.info.changeInSpeed !== 0)
+        if(this.info.changeInSpeed && this.info.changeInSpeed !== 0)
         {
             app.player.moveSpeed += this.info.changeInSpeed;
             app.screen.updatePlayerStats("speed");
+            somethingHappened = true;
         }
 
-        if(this.info.changeInMaxHealth !== 0)
+        if(this.info.changeInMaxHealth && this.info.changeInMaxHealth !== 0)
         {
             app.player.maxHealth += this.info.changeInMaxHealth;
             app.player.health += this.info.changeInMaxHealth;
             app.screen.updatePlayerStats("health");
             app.screen.healthFill.updateFillbar();
+            somethingHappened = true;
+        }
+
+        if(!somethingHappened)
+        {
+            console.log("ERROR: A " + this._name + " was picked up but no change settings were found or noe of them were equal to a value other than 0");
         }
 
         this.killPickup();

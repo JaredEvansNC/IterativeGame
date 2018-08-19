@@ -16,6 +16,16 @@ class Enemy {
             console.log("ERROR: enemySize is not defined for " + info.name);
         }
 
+        if(!this.info.color)
+        {
+            console.log("WARNING: Enemy '" + name + "' does not have a color defined, using default ");
+        }
+
+        if(!this.info.numberOfSides)
+        {
+            console.log("WARNING: Enemy '" + name + "' does not have a numberOfSides defined, using default ");
+        }
+
         // Set the name
         this._name = name;
 
@@ -101,7 +111,22 @@ class Enemy {
         this.healthBar = ui.makeFillbar(this.container, 0, -10 - barPos, 75, 15, ui.colors.dark, "red", "12px Titan One", "white", callback, 2);
         this.healthBar.container.visible = false;
 
-        this.shootTimer = this.info.bulletSettings.fireRate;
+        if(this.info.bulletSettings)
+        {
+            if(this.info.bulletSettings.fireRate || this.info.bulletSettings.fireRate === 0)
+            {
+                this.shootTimer = this.info.bulletSettings.fireRate;
+            }
+            else
+            {
+                console.log("ERROR: Enemy '" + this._name + "' does not have a fireRate defined in bulletSettings");
+            }
+        }
+        else
+        {
+            console.log("ERROR: Enemy '" + this._name + "' does not have a bulletSettings defined");
+        }
+        
 
         if(gameSettings.DEBUG_MODE_ON)
         {
@@ -202,15 +227,18 @@ class Enemy {
             app.player.onCollision(enemy);
         }
 
-        if(this.info.bulletSettings.fireRate > 0)
+        if(this.info.bulletSettings)
         {
-            this.shootTimer -= dt;
-
-            if(this.shootTimer <= 0)
+            if(this.info.bulletSettings.fireRate > 0)
             {
-                this.shootTimer = this.info.bulletSettings.fireRate;
+                this.shootTimer -= dt;
 
-                app.enemyBullets.push(new EnemyBullet(app.gamespace, "ebullet" + app.enemyBullets.length, this._position.x, this._position.y, this._rotation, this.info.bulletSettings));
+                if(this.shootTimer <= 0)
+                {
+                    this.shootTimer = this.info.bulletSettings.fireRate;
+
+                    app.enemyBullets.push(new EnemyBullet(app.gamespace, "ebullet" + app.enemyBullets.length, this._position.x, this._position.y, this._rotation, this.info.bulletSettings));
+                }
             }
         }
     }
@@ -257,6 +285,10 @@ class Enemy {
                     {
                         makePickup = true;
                     }
+                    else if (!this.info.droppedPickups[i].dropChance)
+                    {
+                        console.log("ERROR: Enemy " + this.name + " trying to spawn pickup with name '" + this.info.droppedPickups[i].pickupName + "' which does not have a dropChance");
+                    }
 
                     if(makePickup)
                     {
@@ -264,12 +296,20 @@ class Enemy {
                        {
                         app.pickups.push(new Pickup(app.gamespace, this.info.droppedPickups[i].pickupName, pickupSettings[this.info.droppedPickups[i].pickupName], this._position.x, this._position.y ));
                        }
+                       else if(!this.info.droppedPickups[i].pickupName)
+                       {
+                            console.log("ERROR: Enemy " + this.name + " is trying to spawn a pickup but no pickupName can be found");
+                       }
                        else
                        {
-                            console.log("ERROR: trying to spawn pickup with name " + this.info.droppedPickups[i].pickupName + " which is not defined in pickupSettings ");
+                            console.log("ERROR: Enemy " + this.name + " trying to spawn pickup with name '" + this.info.droppedPickups[i].pickupName + "' which is not defined in pickupSettings ");
                        }
                     }
                 }
+            }
+            else if(!this.info.droppedPickups)
+            {
+                console.log("ERROR: Enemy '" + this._name + "' does not have a droppedPickups array defined");
             }
 
             if(app.enemiesKilledThisWave >= gameSettings.waveDefs[app.currentWave - 1].enemyList.length)

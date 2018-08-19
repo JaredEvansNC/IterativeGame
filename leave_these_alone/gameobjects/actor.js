@@ -173,6 +173,11 @@ class Actor {
     {
         this.health -= collidingObject.info.damage ? collidingObject.info.damage : 0;
         
+        if(!collidingObject.info.damage)
+        {
+            console.log("WARNING: Player collided with '" + collidingObject.name + "' which does not have a damage value defined ");
+        }
+
         app.screen.healthFill.updateFillbar();
 
         if (this.health <= 0)

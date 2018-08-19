@@ -30,8 +30,15 @@ class GameScreen extends ScreenBase
 
         var callback2 = function()
         {
-            this.fill.scaleX = app.enemiesKilledThisWave / gameSettings.waveDefs[app.currentWave - 1].enemyList.length ;
-            this.text.text = app.enemiesKilledThisWave + " / " + gameSettings.waveDefs[app.currentWave - 1].enemyList.length;
+            if(gameSettings.waveDefs[app.currentWave - 1].enemyList)            
+            {
+                this.fill.scaleX = app.enemiesKilledThisWave / gameSettings.waveDefs[app.currentWave - 1].enemyList.length ;
+                this.text.text = app.enemiesKilledThisWave + " / " + gameSettings.waveDefs[app.currentWave - 1].enemyList.length;
+            }
+            else
+            {
+                console.log("ERROR: enemyList is not defined for the current list in waveDefs");
+            }
         };
         this.waveFill = ui.makeFillbar(this, app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 30, 350, 30, ui.colors.dark, "teal", "18px Titan One", "white", callback2 );
         ui.makeText(this, "ENEMIES CLEARED", app.SCREEN_WIDTH / 2, app.SCREEN_HEIGHT - 55, "18px Titan One", ui.defaultFont.color, "center");
@@ -52,9 +59,16 @@ class GameScreen extends ScreenBase
     updateWaveText()
     {
         var waveText = "WAVE " + app.currentWave;
-        if(gameSettings.waveDefs[app.currentWave - 1] && gameSettings.waveDefs[app.currentWave - 1].waveName !== "default")
+        if(gameSettings.waveDefs[app.currentWave - 1] && gameSettings.waveDefs[app.currentWave - 1].waveName)
         {
-            waveText = gameSettings.waveDefs[app.currentWave - 1].waveName;
+            if(gameSettings.waveDefs[app.currentWave - 1].waveName !== "default")
+            {
+                waveText = gameSettings.waveDefs[app.currentWave - 1].waveName;
+            }
+        }
+        else if(!gameSettings.waveDefs[app.currentWave - 1].waveName)
+        {
+            console.log("WARNING: waveName not defined for current wave in waveDefs, default is being used");
         }
 
         this.waveText.text = waveText;

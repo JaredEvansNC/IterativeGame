@@ -146,9 +146,19 @@ class EnemyBullet {
         // create and parent the image
         this._container = new createjs.Container();
         this._image = new createjs.Shape();
-        this._image.graphics.beginFill(bulletInfo.color).dp(0, 0, bulletInfo.bulletSize, 5, 2);
+        this._image.graphics.beginFill(bulletInfo.color ? bulletInfo.color : "white").dp(0, 0, bulletInfo.bulletSize ? bulletInfo.bulletSize : 20, 5, 2);
         parent.addChild(this._container);
         this._container.addChild(this._image);
+
+        if(!bulletInfo.color)
+        {
+            console.log("WARNING: an enemy is trying to fire a bullet that has no color, using default");
+        }
+
+        if(!bulletInfo.bulletSize)
+        {
+            console.log("WARNING: an enemy is trying to fire a bullet that has no bulletSize, using default");
+        }
 
         // Set the name
         this._name = name;
@@ -164,9 +174,14 @@ class EnemyBullet {
 
         this.info = bulletInfo;
 
-        this._radius = bulletInfo.bulletSize;
+        this._radius = bulletInfo.bulletSize ? bulletInfo.bulletSize : 20;
 
-        this.damage = bulletInfo.damage;
+        this.damage = bulletInfo.damage ? bulletInfo.damage : 1;
+        
+        if(!bulletInfo.damage)
+        {
+            console.log("WARNING: an enemy is trying to fire a bullet that has no damage, using default");
+        }
 
         if(gameSettings.DEBUG_MODE_ON)
         {

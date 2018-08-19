@@ -54,7 +54,7 @@ var enemySettings = {
             fireRate: 4,            
             damage: 1,        
             bulletSpeed: 30,         
-            bulletSize: 15,          
+            bulletSize: 50,          
             color: "Plum"      
         }
     },

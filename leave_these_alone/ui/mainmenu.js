@@ -5,7 +5,9 @@ class MainMenu extends ScreenBase
         super();
 
         // Make a title
-        ui.makeText(this, uiSettings.TITLE_TEXT, app.SCREEN_WIDTH / 2, 100, ui.titleFont.font, ui.titleFont.color);
+        var tText = uiSettings.TITLE_TEXT ? uiSettings.TITLE_TEXT : "WARNING: no TITLE_TEXT in uisettings"
+
+        ui.makeText(this, tText, app.SCREEN_WIDTH / 2, 100, ui.titleFont.font, ui.titleFont.color);
 
         // Make a play button
         var textInfo = { text: "PLAY" };

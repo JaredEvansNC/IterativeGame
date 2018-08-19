@@ -270,14 +270,14 @@ var app = {
                         var enemyName = gameSettings.waveDefs[app.currentWave - 1].enemyList[ app.enemiesSpawnedThisWave];
                         var enemyInfo = enemySettings[enemyName];
                         
-                        if (enemyName)
+                        if (enemyName && enemyInfo)
                         {
                             app.enemies.push(new Enemy(app.gamespace, enemyName, enemyInfo));
                             app.enemiesSpawnedThisWave++;
                         }
                         else
                         {
-                            console.log("ERROR: Enemy name listed in waveDefs does not match an enemy in enemysettings.js");
+                            console.log("ERROR: Enemy name '" + enemyName + "' listed in waveDefs does not match an enemy in enemysettings.js");
                         }
                     }
                 }
@@ -527,13 +527,29 @@ var app = {
     // What is our next spawn time?
     getNextSpawnTime: function()
     {
-        var randomTimeOffset = (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer * 2) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
-
-        this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + randomTimeOffset;
-
-        if(this.nextSpawnTime < 0.25)
+        if(gameSettings.waveDefs[this.currentWave - 1].spawnRate)
         {
-            this.nextSpawnTime = 0.25;
+            var randomTimeOffset = 0;
+            if(gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer)
+            {
+                randomTimeOffset = (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer * 2) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
+            }
+            else
+            {
+                console.log("WARNING: spawnRateRandomizer is not defined for the current wave in waveDefs, no randomization applied");
+            }
+
+            
+            this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + randomTimeOffset;
+
+            if(this.nextSpawnTime < 0.25)
+            {
+                this.nextSpawnTime = 0.25;
+            }
+        }
+        else
+        {
+            console.log("ERROR: spawnRate is not defined for the current wave in waveDefs");
         }
 
     },
