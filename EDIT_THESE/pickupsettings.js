@@ -1,7 +1,9 @@
 // These are the definitions of items that can be picked up, such as coins, health packs, and permanent upgrades
+// The names are used in the enemysettings file, in the dropped pickups section.
+// Feel free to edit these or add your own.
 var pickupSettings = {
     "healthpack": {         // the name of the pickup, used in enemysettings
-        displayText: "+",   // What text to show on the pickup
+        displayText: "+",   // What text to show on the pickup. If you want to use emojis, use the unicode emojis found at https://emojipedia.org/search/?q=heart
         imageSize: 20,      // How big should the image for this pickup be
         collisionRadius: 35,// How easy is it to collide with this pickup
         color: "green",     // What color will this pickup be
@@ -40,7 +42,7 @@ var pickupSettings = {
         changeInMaxHealth: 0,
     },
     "permanentDamageBoost": {
-        displayText: "DMG+",
+        displayText: "🔫",
         imageSize: 25,
         collisionRadius: 45,
         color: "cornflowerblue",
@@ -53,7 +55,7 @@ var pickupSettings = {
         changeInMaxHealth: 0,
     },
     "permanentSpeedBoost": {
-        displayText: "SPD+",
+        displayText: "👟",
         imageSize: 25,
         collisionRadius: 45,
         color: "orangered",
@@ -66,11 +68,11 @@ var pickupSettings = {
         changeInMaxHealth: 0,
     },
     "permanentHealthBoost": {
-        displayText: "HLTH+",
+        displayText: "❤️",
         imageSize: 25,
         collisionRadius: 45,
-        color: "red",
-        textColor: "white",
+        color: "white",
+        textColor: "red",
         timeToLive: 10,
         changeInHealth: 0,
         changeInScore: 0,

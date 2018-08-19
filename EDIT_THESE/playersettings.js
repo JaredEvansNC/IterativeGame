@@ -1,3 +1,4 @@
+// These are the player and player bullet settings.
 var playerSettings = {
 
     playerSize : 0.5,   // The bigger this is, the larger the player image will be
