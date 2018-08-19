@@ -22,8 +22,14 @@ class Pickup {
         this._name = name;
 
         this._position = {x: 0, y: 0};
-        this._position.x = xPos + ((Math.random() * 40) - 20);
-        this._position.y = yPos + ((Math.random() * 40) - 20);
+        this._position.x = xPos + ((Math.random() * 70) - 35);
+        this._position.y = yPos + ((Math.random() * 70) - 35);
+
+        if(this._position.x < 20)    this.position.x = 20;
+        if(this._position.x > app.SCREEN_WIDTH - 20)    this.position.x = app.SCREEN_WIDTH - 20;
+        if(this._position.y < 20)    this.position.y = 20;
+        if(this._position.y > app.SCREEN_HEIGHT - 20)    this.position.y = app.SCREEN_HEIGHT - 20;
+
         this._rotation = 0;
 
         // Set the attributes of the container

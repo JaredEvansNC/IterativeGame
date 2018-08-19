@@ -104,6 +104,11 @@ class Actor {
     {
         this._position.x += x;
         this._position.y += y;
+
+        if(this._position.x < 0)    this.position.x = 0;
+        if(this._position.x > app.SCREEN_WIDTH)    this.position.x = app.SCREEN_WIDTH;
+        if(this._position.y < 0)    this.position.y = 0;
+        if(this._position.y > app.SCREEN_HEIGHT)    this.position.y = app.SCREEN_HEIGHT;
     }
 
     setScale(scaleX, scaleY)
