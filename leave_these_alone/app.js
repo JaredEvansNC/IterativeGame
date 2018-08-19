@@ -181,9 +181,9 @@ var app = {
             }
 
             var moveSpeed = 50;
-            if(playerSettings.moveSpeed)
+            if(app.player.moveSpeed)
             {
-                moveSpeed = playerSettings.moveSpeed;
+                moveSpeed = app.player.moveSpeed;
             }
             else
             {
@@ -194,22 +194,22 @@ var app = {
             // Poll the keys and move the player character accordinlgy
             if(app.KEYCODE_LEFT.isPressed || app.KEYCODE_A.isPressed)
             {
-                app.player.addPosition(-playerSettings.moveSpeed * dt, 0);
+                app.player.addPosition(-moveSpeed * dt, 0);
             }
 
             if(app.KEYCODE_RIGHT.isPressed || app.KEYCODE_D.isPressed)
             {
-                app.player.addPosition(playerSettings.moveSpeed * dt, 0);
+                app.player.addPosition(moveSpeed * dt, 0);
             }
 
             if(app.KEYCODE_UP.isPressed || app.KEYCODE_W.isPressed)
             {
-                app.player.addPosition(0, -playerSettings.moveSpeed * dt);
+                app.player.addPosition(0, -moveSpeed * dt);
             }
 
             if(app.KEYCODE_DOWN.isPressed || app.KEYCODE_S.isPressed)
             {
-                app.player.addPosition(0, playerSettings.moveSpeed * dt);
+                app.player.addPosition(0, moveSpeed * dt);
             }
 
             // We need the angle in both radians and degrees
@@ -488,10 +488,13 @@ var app = {
         app.waveReset();
         app.enemiesKilledThisGame = 0;
         
+        // Reset player stats
         if(app.player)
         {
             app.player.health = playerSettings.startingHealth;
-
+            app.player.maxHealth = playerSettings.startingHealth;
+            app.player.bulletDamage = playerSettings.bulletDamage;
+            app.player.moveSpeed = playerSettings.moveSpeed;
         }
 
 

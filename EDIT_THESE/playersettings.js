@@ -9,6 +9,6 @@ var playerSettings = {
     bulletSpeed: 500,    // How fast the bullets move
     bulletDamage: 1,    // How much damage bullets do
     bulletSize: 1,     // How big is the bullet image - the bigger this is, the larger the bullet will be
-    fireRate: .25,         // How long in seconds between shots
+    fireRate: 0.25,         // How long in seconds between shots
     bulletCollisionRadius: 20,  // How easy it is to collide with a bullet
 }

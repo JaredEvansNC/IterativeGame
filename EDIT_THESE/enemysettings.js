@@ -1,3 +1,5 @@
+// This file contains the definitions for various enemy types. Feel free to tweak these and add your own entries.
+// The names are used in the waveDefs section of the gamesettings.js file.
 var enemySettings = {
     
     "basicEnemy" :              // This name is the name you use in the waveDefs array in gamesettings.js

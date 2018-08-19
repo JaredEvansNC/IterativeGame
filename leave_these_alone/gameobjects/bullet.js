@@ -39,9 +39,9 @@ class Bullet {
 
         this.damage = 5;
 
-        if(playerSettings.bulletDamage)
+        if(app.player.bulletDamage)
         {
-            this.damage = playerSettings.bulletDamage;
+            this.damage = app.player.bulletDamage;
         }
         else
         {
@@ -235,7 +235,7 @@ class EnemyBullet {
 		this._position.y -= Math.sin(this.getRotationRadians()) * bulletSpeed * dt;
         this._container.x = this._position.x;
         this._container.y = this._position.y; 
-        this._image.rotation += 5;
+        this._image.rotation += 10;
 
         if(this._position.x < -10 || this._position.x > app.SCREEN_WIDTH + 10 || this._position.y < -10 || this._position.y > app.SCREEN_HEIGHT + 10)
         {

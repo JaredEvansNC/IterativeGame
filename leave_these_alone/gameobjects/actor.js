@@ -32,9 +32,6 @@ class Actor {
         this._image.regY = this._image.getBounds().height/2;
 
         this._radius = 25;
-
-        this.health = 5;
-
         if(playerSettings.collisionRadius)
         {
             this._radius = playerSettings.collisionRadius;
@@ -44,6 +41,7 @@ class Actor {
             console.log("ERROR: playerSettings.collisionRadius is not defined");
         }
 
+        this.health = 5;
         if(playerSettings.startingHealth)
         {
             this.health = playerSettings.startingHealth;
@@ -51,6 +49,32 @@ class Actor {
         else
         {
             console.log("ERROR: playerSettings.startingHealth is not defined");
+        }
+
+        this.maxHealth = 5;
+        if(playerSettings.startingHealth)
+        {
+            this.maxHealth = playerSettings.startingHealth;
+        }
+
+        this.bulletDamage = 1;
+        if(playerSettings.bulletDamage)
+        {
+            this.bulletDamage = playerSettings.bulletDamage;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.bulletDamage is not defined");
+        }
+
+        this.moveSpeed = 50;
+        if(playerSettings.moveSpeed)
+        {
+            this.moveSpeed = playerSettings.moveSpeed;
+        }
+        else
+        {
+            console.log("ERROR: playerSettings.moveSpeed is not defined");
         }
 
         if(gameSettings.DEBUG_MODE_ON)
@@ -96,7 +120,7 @@ class Actor {
 
         this.health = this.health + changeVal;
 
-        if(this.health > playerSettings.startingHealth)
+        if(this.health > this.maxHealth)
         {
             this.health = playerSettings.startingHealth;
         }

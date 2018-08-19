@@ -168,6 +168,26 @@ class Pickup {
             app.screen.scoreUI.text = app.score;
         }
 
+        if(this.info.changeInDamage !== 0)
+        {
+            app.player.bulletDamage += this.info.changeInDamage;
+            app.screen.updatePlayerStats("damage");
+        }
+
+        if(this.info.changeInSpeed !== 0)
+        {
+            app.player.moveSpeed += this.info.changeInSpeed;
+            app.screen.updatePlayerStats("speed");
+        }
+
+        if(this.info.changeInMaxHealth !== 0)
+        {
+            app.player.maxHealth += this.info.changeInMaxHealth;
+            app.player.health += this.info.changeInMaxHealth;
+            app.screen.updatePlayerStats("health");
+            app.screen.healthFill.updateFillbar();
+        }
+
         this.killPickup();
 
     }
