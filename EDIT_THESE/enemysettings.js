@@ -1,12 +1,12 @@
 // This file contains the definitions for various enemy types. Feel free to tweak these and add your own entries.
-// The names are used in the waveDefs section of the gamesettings.js file.
+// The names are used in the waveDefs section of the gamesettings.js file when you're deciding what enemies to add to your wave.
 var enemySettings = {
     
     "basicEnemy" :              // This name is the name you use in the waveDefs array in gamesettings.js
     {           
-        moveSpeed: 30,          // How fast this enemy moves
+        moveSpeed: 40,          // How fast this enemy moves
         health: 2,              // How much health does this enemy have
-        collisionRadius: 15,    // How easy it is to collide with this enemy
+        collisionRadius: 15,    // How easy it is to collide with this enemy, turn DEBUG_MODE_ON to true in gamesettings to see this as a black circle
         enemySize: 25,          // How big this enemy's image is
         damage: 1,              // How much damage this enemy does when it touches the player
         color: "fuchsia",       // What color is this enemy? Other colors can be found here: https://www.quackit.com/css/css_color_codes.cfm
@@ -29,7 +29,7 @@ var enemySettings = {
             fireRate: 0,            // How fast this enemy fires bullets. If 0, this enemy doesn't fire bullets
             damage: 0,              // How much damage each bullet does
             bulletSpeed: 0,         // How fast this enemy's bullets travel
-            bulletSize: 0,          // How big are these bullets
+            bulletSize: 0,          // How big are these bullets, this also affects the collision radius for the bullets
             color: "Plum"           // What color are they
         }
     },
@@ -95,8 +95,8 @@ var enemySettings = {
                 dropChance: 1,         
             },
             {
-                pickupName: "coin5",    // Which pickup from pickupSettings.js will be dropped
-                dropChance: 1,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+                pickupName: "coin5",    
+                dropChance: 1,         
             },
         ],
         bulletSettings : {          

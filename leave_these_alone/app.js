@@ -387,7 +387,7 @@ var app = {
             this.state = "wavestart";
             this.createPlayer();
             this.screen.healthFill.updateFillbar();
-            this.getNextSpawnTime();
+            this.nextSpawnTime = 0.25;
             app.screen.waveFill.updateFillbar();
             break;
 
@@ -527,7 +527,15 @@ var app = {
     // What is our next spawn time?
     getNextSpawnTime: function()
     {
-        this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer + gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
+        var randomTimeOffset = (Math.random() * (gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer * 2) - gameSettings.waveDefs[this.currentWave - 1].spawnRateRandomizer);
+
+        this.nextSpawnTime = gameSettings.waveDefs[this.currentWave - 1].spawnRate + randomTimeOffset;
+
+        if(this.nextSpawnTime < 0.25)
+        {
+            this.nextSpawnTime = 0.25;
+        }
+
     },
 
     clearGameObjects: function()
@@ -564,7 +572,7 @@ var app = {
         app.waveStartTimer = gameSettings.waveStartDelay;
         app.enemiesSpawnedThisWave = 0;
         app.enemiesKilledThisWave = 0;
-        app.getNextSpawnTime();
+        app.nextSpawnTime = 0.25;
         if(app.screen.waveFill)
         {
             app.screen.waveFill.updateFillbar();
