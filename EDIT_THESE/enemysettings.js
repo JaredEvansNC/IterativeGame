@@ -34,7 +34,7 @@ var enemySettings = {
         }
     },
 
-    "healthpackEnemy" :
+    "healthpackEnemyThatShoots" :
     {            
         moveSpeed: 20,         
         health: 4,             
@@ -51,32 +51,12 @@ var enemySettings = {
 
         ],
         bulletSettings : {          
-            fireRate: 0,            
-            damage: 0,        
-            bulletSpeed: 0,         
-            bulletSize: 0,          
-            color: "Plum"      
-        } 
-    },
-
-    "bulletEnemy" :
-    {            
-        moveSpeed: 5,         
-        health: 3,             
-        collisionRadius: 30,    
-        enemySize: 15,           
-        damage: 3,  
-        color: "orchid",
-        numberOfSides: 7,
-        droppedPickups: [       
-        ],
-        bulletSettings : {          
             fireRate: 4,            
             damage: 1,        
             bulletSpeed: 30,         
             bulletSize: 15,          
             color: "Plum"      
-        } 
+        }
     },
 
 

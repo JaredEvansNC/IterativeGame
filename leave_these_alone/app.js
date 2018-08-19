@@ -538,16 +538,19 @@ var app = {
 
     },
 
-    clearGameObjects: function()
+    clearGameObjects: function(clearPickups = true)
     {
         for(i = app.enemies.length -1 ; i >= 0; i--)
         {
             app.enemies[i].killEnemy();
         }
 
-        for(i = app.pickups.length -1 ; i >= 0; i--)
-        {
-            app.pickups[i].killPickup();
+        if(clearPickups)
+        {        
+            for(i = app.pickups.length -1 ; i >= 0; i--)
+            {
+                app.pickups[i].killPickup();
+            }
         }
 
         for(i = app.bullets.length -1 ; i >= 0; i--)

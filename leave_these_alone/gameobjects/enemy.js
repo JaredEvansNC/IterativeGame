@@ -280,7 +280,7 @@ class Enemy {
                 {
                     app.currentWave++;
                     app.screen.waveText.text += " COMPLETE";
-                    app.clearGameObjects();
+                    app.clearGameObjects(false);
 
                     if (app.currentWave > gameSettings.waveDefs.length)
                     {
