@@ -173,7 +173,7 @@ class Actor {
     {
         this.health -= collidingObject.info.damage ? collidingObject.info.damage : 0;
         
-        if(!collidingObject.info.damage)
+        if(!collidingObject.info.damage && !(collidingObject instanceof Pickup))
         {
             console.log("WARNING: Player collided with '" + collidingObject.name + "' which does not have a damage value defined ");
         }
