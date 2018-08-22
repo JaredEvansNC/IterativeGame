@@ -13,17 +13,10 @@ var enemySettings = {
         numberOfSides: 5,       // How many sides does this enemy's shape have?
         droppedPickups: [       // What pickups does the enemy drop when it dies?
             {
-                pickupName: "coin1",    // Which pickup from pickupSettings.js will be dropped
-                dropChance: 1,          // How likely it is to drop, 0 to 1, 1 being 100% chance
+                pickupName: "permanentHealthBoost",    // Which pickup from pickupSettings.js will be dropped
+                dropChance: 1,       // How likely it is to drop, 0 to 1, 1 being 100% chance
             },
-            {
-                pickupName: "coin1",    // Which pickup from pickupSettings.js will be dropped
-                dropChance: 0.66,       // How likely it is to drop, 0 to 1, 1 being 100% chance
-            },
-            {
-                pickupName: "coin5",    // Which pickup from pickupSettings.js will be dropped
-                dropChance: 0.33,       // How likely it is to drop, 0 to 1, 1 being 100% chance
-            },
+            
         ],
         bulletSettings : {          // If this enemy fires bullets, give those bullets settings
             fireRate: 0,            // How fast this enemy fires bullets. If 0, this enemy doesn't fire bullets
@@ -51,7 +44,7 @@ var enemySettings = {
 
         ],
         bulletSettings : {          
-            fireRate: 4,            
+            fireRate: 0,            
             damage: 1,        
             bulletSpeed: 30,         
             bulletSize: 50,          

@@ -214,7 +214,6 @@ class Pickup {
             app.player.maxHealth += this.info.changeInMaxHealth;
             app.player.health += this.info.changeInMaxHealth;
             app.screen.updatePlayerStats("health");
-            app.screen.healthFill.updateFillbar();
             somethingHappened = true;
         }
 

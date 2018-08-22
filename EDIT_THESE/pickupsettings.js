@@ -79,5 +79,18 @@ var pickupSettings = {
         changeInDamage: 0,
         changeInSpeed: 0,
         changeInMaxHealth: 1,
+    },
+    "permanentHealthBoost": {
+        displayText: "❤️",
+        imageSize: 25,
+        collisionRadius: 45,
+        color: "white",
+        textColor: "red",
+        timeToLive: 10,
+        changeInHealth: 0,
+        changeInScore: 0,
+        changeInDamage: 0,
+        changeInSpeed: 0,
+        changeInMaxHealth: 1,
     }
 }

@@ -265,7 +265,11 @@ class Enemy {
             this.killEnemy();
 
             app.enemiesKilledThisWave++;
-            app.enemiesKilledThisGame++;
+            
+            if(collidingObject.damage)
+            {
+                app.enemiesKilledThisGame++;
+            }
 
             app.screen.waveFill.updateFillbar();
 
